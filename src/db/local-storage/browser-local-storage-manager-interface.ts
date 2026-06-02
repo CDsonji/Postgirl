@@ -9,13 +9,13 @@ export interface LocalStorageManager {
   getData(): Data;
 
   save(): void;
-  clear(): void;
+  // clear(): void;
 
-  addRequest(request: HttpRequest): void;
-  updateRequest(request: HttpRequest): void;
-  removeRequest(id: string): HttpRequest;
+  // addRequest(request: HttpRequest): void;
+  // updateRequest(request: HttpRequest): void;
+  // removeRequest(id: string): HttpRequest;
 
-  addCollection(collection: Collection): void;
-  updateCollection(collection: Collection): void;
-  removeCollection(id: string): Collection;
+  // addCollection(collection: Collection): void;
+  // updateCollection(collection: Collection): void;
+  // removeCollection(id: string): Collection;
 }

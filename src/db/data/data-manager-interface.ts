@@ -41,31 +41,36 @@ export interface Collection {
 export interface Data {
   requests: Record<string, HttpRequest>;
   collections: Record<string, Collection>;
+  history: Record<string, HttpRequest>;
 }
 
 export interface DataManager {
-  getData(): Data
+  getData(): Data;
 
-  getRequestById(id: string): HttpRequest
-  getCollectionById(id: string): Collection
+  getRequestById(id: string): HttpRequest;
+  getCollectionById(id: string): Collection;
 
-  getAllRequests(): HttpRequest[]
-  getAllCollections(): Collection[]
-  getRequestsFromCollectionById(collectionId: string): HttpRequest[]
+  getAllRequests(): HttpRequest[];
+  getAllCollections(): Collection[];
+  getRequestsFromCollectionById(collectionId: string): HttpRequest[];
 
-  hasRequest(id: string): boolean
-  hasCollection(id: string): boolean
+  getRequestHistory(): HttpRequest[];
+  getPartialRequestHistory(start: number, end: number): HttpRequest[];
+  addRequestToHistory(request: HttpRequest): void;
+  removeRequestFromHistory(timestamp: number): HttpRequest;
 
-  addRequest(request: HttpRequest): void
-  updateRequest(request: HttpRequest): void
-  removeRequest(id: string): HttpRequest
+  hasRequest(id: string): boolean;
+  hasCollection(id: string): boolean;
 
-  addCollection(collection: Collection): void
-  updateCollection(collection: Collection): void
-  removeCollection(id: string): Collection
+  addRequest(request: HttpRequest): void;
+  updateRequest(request: HttpRequest): void;
+  removeRequest(id: string): HttpRequest;
 
-  clearRequests(): void
-  clearCollections(): void
-  clearAll(): void
+  addCollection(collection: Collection): void;
+  updateCollection(collection: Collection): void;
+  removeCollection(id: string): Collection;
+
+  clearRequests(): void;
+  clearCollections(): void;
+  clearAll(): void;
 }
-

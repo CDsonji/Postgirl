@@ -1,7 +1,9 @@
-import type { Collection, Data, DataManager, HttpRequest } from "../data/data-manager-interface";
+import type {
+  Data,
+  DataManager,
+} from "../data/data-manager-interface";
 import { Database } from "../data/database";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
-
 
 export class BrowserLocalStorageManager implements LocalStorageManager {
   private readonly storageKey: string;
@@ -22,6 +24,7 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
       this.manager = new Database({
         requests: {},
         collections: {},
+        history: {},
       });
       return;
     }
@@ -32,6 +35,7 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
       this.manager = new Database({
         requests: parsedData.requests ?? {},
         collections: parsedData.collections ?? {},
+        history: parsedData.history ?? {},
       });
     } catch (error) {
       console.error("Failed to parse localStorage data:", error);
@@ -39,6 +43,7 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
       this.manager = new Database({
         requests: {},
         collections: {},
+        history: {},
       });
     }
   }
@@ -62,43 +67,44 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     );
   }
 
-  clear(): void {
-    localStorage.removeItem(this.storageKey);
-    this.manager = new Database({
-      requests: {},
-      collections: {},
-    });
-  }
+  // clear(): void {
+  //   localStorage.removeItem(this.storageKey);
+  //   this.manager = new Database({
+  //     requests: {},
+  //     collections: {},
+  //     history: {},
+  //   });
+  // }
 
-  addRequest(request: HttpRequest): void {
-    this.getManager().addRequest(request);
-    this.save();
-  }
+  // addRequest(request: HttpRequest): void {
+  //   this.getManager().addRequest(request);
+  //   this.save();
+  // }
 
-  updateRequest(request: HttpRequest): void {
-    this.getManager().updateRequest(request);
-    this.save();
-  }
+  // updateRequest(request: HttpRequest): void {
+  //   this.getManager().updateRequest(request);
+  //   this.save();
+  // }
 
-  removeRequest(id: string): HttpRequest {
-    const removed = this.getManager().removeRequest(id);
-    this.save();
-    return removed;
-  }
+  // removeRequest(id: string): HttpRequest {
+  //   const removed = this.getManager().removeRequest(id);
+  //   this.save();
+  //   return removed;
+  // }
 
-  addCollection(collection: Collection): void {
-    this.getManager().addCollection(collection);
-    this.save();
-  }
+  // addCollection(collection: Collection): void {
+  //   this.getManager().addCollection(collection);
+  //   this.save();
+  // }
 
-  updateCollection(collection: Collection): void {
-    this.getManager().updateCollection(collection);
-    this.save();
-  }
+  // updateCollection(collection: Collection): void {
+  //   this.getManager().updateCollection(collection);
+  //   this.save();
+  // }
 
-  removeCollection(id: string): Collection {
-    const removed = this.getManager().removeCollection(id);
-    this.save();
-    return removed;
-  }
+  // removeCollection(id: string): Collection {
+  //   const removed = this.getManager().removeCollection(id);
+  //   this.save();
+  //   return removed;
+  // }
 }

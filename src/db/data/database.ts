@@ -1,19 +1,56 @@
-import type { Collection, Data, DataManager, HttpRequest } from "./data-manager-interface";
+import type {
+  Collection,
+  Data,
+  DataManager,
+  HttpRequest,
+} from "./data-manager-interface";
 
 export class Database implements DataManager {
   private data: Data;
 
-  constructor(data: Data = { requests: {}, collections: {} }) {
+  constructor(data: Data = { requests: {}, collections: {}, history: {} }) {
     this.data = {
       requests: { ...data.requests },
       collections: { ...data.collections },
+      history: { ...data.history },
     };
+  }
+
+  getRequestHistory(): HttpRequest[] {
+    return Object.keys(this.data.history)
+      .sort((a, b) => Number(a) - Number(b))
+      .map((time) => this.data.history[time]);
+  }
+
+  getPartialRequestHistory(start: number = 0, end: number): HttpRequest[] {
+    return Object.keys(this.data.history)
+      .sort((a, b) => Number(a) - Number(b))
+      .slice(start, end)
+      .map((time) => this.data.history[time]);
+  }
+
+  addRequestToHistory(request: HttpRequest): void {
+    const timestamp = Date.now().toString();
+    this.data.history[timestamp] = request;
+  }
+
+  removeRequestFromHistory(timestamp: number): HttpRequest {
+    const key = timestamp.toString();
+    const request = this.data.history[key];
+
+    if (!request) {
+      throw new Error(`No request found in history for timestamp ${timestamp}`);
+    }
+
+    delete this.data.history[key];
+    return request;
   }
 
   getData(): Data {
     return {
       requests: { ...this.data.requests },
       collections: { ...this.data.collections },
+      history: { ...this.data.history },
     };
   }
 
