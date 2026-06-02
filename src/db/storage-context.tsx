@@ -1,5 +1,5 @@
 import { createContext, useContext, useRef, type ReactNode } from "react";
-import { BrowserLocalStorageManager } from "./local-storage/local-storage-manager";
+import { BrowserLocalStorageManager } from "./local-storage/browser-local-storage-manager";
 
 type StorageContextType = {
   storage: BrowserLocalStorageManager;

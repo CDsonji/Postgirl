@@ -2,7 +2,7 @@ import type {
   Data,
   DataManager,
 } from "../data/data-manager-interface";
-import { Database } from "../data/database";
+import { Database } from "../data/data-base";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
 
 export class BrowserLocalStorageManager implements LocalStorageManager {

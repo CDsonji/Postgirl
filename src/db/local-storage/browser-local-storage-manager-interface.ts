@@ -1,4 +1,4 @@
-import type { Collection, Data, DataManager, HttpRequest } from "../data/data-manager-interface";
+import type { Data, DataManager} from "../data/data-manager-interface";
 
 
 export interface LocalStorageManager {
