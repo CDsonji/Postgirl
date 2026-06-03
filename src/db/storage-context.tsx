@@ -10,6 +10,8 @@ const StorageContext = createContext<StorageContextType | null>(null);
 export function StorageProvider({ children }: { children: ReactNode }) {
   const storageRef = useRef<BrowserLocalStorageManager | null>(null);
 
+  console.log(storageRef.current);
+
   if (!storageRef.current) {
     storageRef.current = new BrowserLocalStorageManager();
     storageRef.current.initialize();

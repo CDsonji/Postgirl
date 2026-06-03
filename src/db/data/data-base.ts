@@ -1,19 +1,35 @@
-import type {
-  Collection,
-  Data,
-  DataManager,
-  HttpRequest,
+import {
+  Theme,
+  type Collection,
+  type Data,
+  type DataManager,
+  type HttpRequest,
 } from "./data-manager-interface";
+import { PageData } from "./page-data";
 
 export class Database implements DataManager {
   private data: Data;
 
-  constructor(data: Data = { requests: {}, collections: {}, history: {} }) {
-    this.data = {
-      requests: { ...data.requests },
-      collections: { ...data.collections },
-      history: { ...data.history },
-    };
+  constructor(
+    data: Data = {
+      requests: {},
+      collections: {},
+      history: {},
+      theme: Theme.DARK,
+    }
+  ) {
+    this.data = new PageData(
+      data.requests,
+      data.collections,
+      data.history,
+      data.theme
+    );
+  }
+
+  toggleTheme(): void {
+    this.data.theme === Theme.DARK
+      ? (this.data.theme = Theme.LIGHT)
+      : (this.data.theme = Theme.DARK);
   }
 
   getRequestHistory(): HttpRequest[] {
@@ -47,11 +63,7 @@ export class Database implements DataManager {
   }
 
   getData(): Data {
-    return {
-      requests: { ...this.data.requests },
-      collections: { ...this.data.collections },
-      history: { ...this.data.history },
-    };
+    return this.data;
   }
 
   getRequestById(id: string): HttpRequest {

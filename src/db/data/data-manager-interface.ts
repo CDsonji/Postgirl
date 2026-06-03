@@ -12,6 +12,13 @@ export const Method = {
 
 export type Method = (typeof Method)[keyof typeof Method];
 
+export const Theme = {
+  DARK: "Dark-Mode",
+  LIGHT: "Light-Mode",
+} as const;
+
+export type Theme = (typeof Theme)[keyof typeof Theme];
+
 export interface HttpRequest {
   id: string;
   collectionId?: string;
@@ -42,6 +49,7 @@ export interface Data {
   requests: Record<string, HttpRequest>;
   collections: Record<string, Collection>;
   history: Record<string, HttpRequest>;
+  theme: Theme
 }
 
 export interface DataManager {
@@ -73,4 +81,6 @@ export interface DataManager {
   clearRequests(): void;
   clearCollections(): void;
   clearAll(): void;
+
+  toggleTheme(): void
 }

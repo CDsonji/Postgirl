@@ -1,9 +1,7 @@
-import type {
-  Data,
-  DataManager,
-} from "../data/data-manager-interface";
+import type { Data, DataManager } from "../data/data-manager-interface";
 import { Database } from "../data/data-base";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
+import { PageData } from "../data/page-data";
 
 export class BrowserLocalStorageManager implements LocalStorageManager {
   private readonly storageKey: string;
@@ -21,30 +19,25 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     const rawData = localStorage.getItem(this.storageKey);
 
     if (!rawData) {
-      this.manager = new Database({
-        requests: {},
-        collections: {},
-        history: {},
-      });
+      this.manager = new Database(new PageData());
       return;
     }
 
     try {
       const parsedData = JSON.parse(rawData) as Partial<Data>;
 
-      this.manager = new Database({
-        requests: parsedData.requests ?? {},
-        collections: parsedData.collections ?? {},
-        history: parsedData.history ?? {},
-      });
+      this.manager = new Database(
+        new PageData(
+          parsedData.requests ?? {},
+          parsedData.collections ?? {},
+          parsedData.history ?? {},
+          parsedData.theme
+        )
+      );
     } catch (error) {
       console.error("Failed to parse localStorage data:", error);
 
-      this.manager = new Database({
-        requests: {},
-        collections: {},
-        history: {},
-      });
+      this.manager = new Database(new PageData());
     }
   }
 

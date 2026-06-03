@@ -1,0 +1,30 @@
+:root {
+  --page-title-color: #a200b7;
+}
+
+:root[data-theme="Light-Mode"] {
+  --page-background: white;
+  --text-color: black;
+}
+
+:root[data-theme="Dark-Mode"] {
+  --page-background: #121212;
+  --text-color: white;
+  --settings-icon-hover: rgba(255, 255, 255, 0.173);
+}
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
+  box-sizing: content-box;
+}
+
+html {
+  font-size: clamp(8px, 0.833vw, 62.5%);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: var(--page-background);
+  color: var(--text-color);
+}

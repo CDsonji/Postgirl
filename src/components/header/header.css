@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 1.5rem 0rem;
+}
+
+.page-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  color: var(--page-title-color);
+}
+
+.page-title-logo {
+  height: 3.5rem;
+  align-self: center;
+}
+
+.page-title-heading {
+  margin: 0rem 0rem 0rem 1rem;
+  align-self: center;
+}
+
+.settings-button {
+  margin: 0rem auto 0rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.6rem;
+  width: 2.6rem;
+  border-radius: 0.7rem;
+}
+
+.settings-button:hover {
+  background-color: var(--settings-icon-hover);
+}
+
+.settings-logo {
+  height: 2rem;
+}
