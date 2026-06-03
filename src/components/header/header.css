@@ -26,18 +26,4 @@
 
 .settings-button {
   margin: 0rem auto 0rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.6rem;
-  width: 2.6rem;
-  border-radius: 0.7rem;
-}
-
-.settings-button:hover {
-  background-color: var(--settings-icon-hover);
-}
-
-.settings-logo {
-  height: 2rem;
 }

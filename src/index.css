@@ -1,16 +1,23 @@
 :root {
   --page-title-color: #a200b7;
+  --dark-mode-toggle: #515050;
+  --light-mode-toggle: white;
+  --component-border: var(--page-title-color);
+  --icon-hover: #a200b771;
 }
 
 :root[data-theme="Light-Mode"] {
-  --page-background: white;
+  --page-primary-background: white;
+  --page-secondary-background: #cfcfcf;
   --text-color: black;
+  /* --icon-hover: rgba(0, 0, 0, 0.249); */
 }
 
 :root[data-theme="Dark-Mode"] {
-  --page-background: #121212;
+  --page-primary-background: #121212;
+  --page-secondary-background: #252525;
   --text-color: white;
-  --settings-icon-hover: rgba(255, 255, 255, 0.173);
+  /* --icon-hover: rgba(255, 255, 255, 0.249); */
 }
 
 * {
@@ -25,6 +32,23 @@ html {
 }
 
 body {
-  background: var(--page-background);
+  background: var(--page-primary-background);
   color: var(--text-color);
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.6rem;
+  width: 2.6rem;
+  border-radius: 0.7rem;
+}
+
+.icon-button:hover {
+  background-color: var(--icon-hover);
+}
+
+.icon {
+  height: 2rem;
 }
