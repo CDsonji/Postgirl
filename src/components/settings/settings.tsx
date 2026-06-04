@@ -3,7 +3,7 @@ import { useTheme } from "../theme/theme-context";
 import "./settings.css";
 
 type SettingsProps = {
-  exitButtonAction: (state: boolean) => void;
+  exitButtonAction: () => void;
 };
 
 const Settings = ({ exitButtonAction }: SettingsProps) => {
@@ -15,7 +15,7 @@ const Settings = ({ exitButtonAction }: SettingsProps) => {
         <div
           className="icon-button exit-button"
           onClick={() => {
-            exitButtonAction(false);
+            exitButtonAction();
           }}
         >
           <img

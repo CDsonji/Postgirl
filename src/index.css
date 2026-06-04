@@ -1,23 +1,40 @@
 :root {
-  --page-title-color: #a200b7;
+  --primary-color: #a200b7;
   --dark-mode-toggle: #515050;
   --light-mode-toggle: white;
-  --component-border: var(--page-title-color);
-  --icon-hover: #a200b771;
+  --text-button-hover: #a200b771;
 }
 
 :root[data-theme="Light-Mode"] {
   --page-primary-background: white;
   --page-secondary-background: #cfcfcf;
+  --component-border: #919191;
   --text-color: black;
-  /* --icon-hover: rgba(0, 0, 0, 0.249); */
+  --request-list-item-hover: #afafaf;
+  --icon-hover: rgba(0, 0, 0, 0.249);
+  --patch: #623497;
+  --get: #007F31;
+  --post: #B98D27;
+  --put: #0355B9;
+  --delete: #94261C;
+  --head: #269250;
+  --options: #A61468;
 }
 
 :root[data-theme="Dark-Mode"] {
-  --page-primary-background: #121212;
+  --page-primary-background: #1a1a1a;
   --page-secondary-background: #252525;
+  --component-border: #535353;
   --text-color: white;
-  /* --icon-hover: rgba(255, 255, 255, 0.249); */
+  --request-list-item-hover: #363636;
+  --icon-hover: rgba(165, 165, 165, 0.249);
+  --patch: #c0a8e1;
+  --get: #6bdd9a;
+  --post: #e8d074;
+  --put: #74aef6;
+  --delete: #f79a8e;
+  --head: #67d293;
+  --options: #d9579f;
 }
 
 * {
@@ -28,7 +45,7 @@
 
 html {
   font-size: clamp(8px, 0.833vw, 62.5%);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Calibri, "Trebuchet MS", sans-serif;
 }
 
 body {
@@ -51,4 +68,36 @@ body {
 
 .icon {
   height: 2rem;
+}
+
+span.method {
+  font-weight: bold;
+}
+
+span.PATCH {
+  color: var(--patch);
+}
+
+span.GET {
+  color: var(--get);
+}
+
+span.POST {
+  color: var(--post);
+}
+
+span.PUT {
+  color: var(--put);
+}
+
+span.DELETE {
+  color: var(--delete);
+}
+
+span.HEAD {
+  color: var(--head);
+}
+
+span.OPTIONS {
+  color: var(--options);
 }

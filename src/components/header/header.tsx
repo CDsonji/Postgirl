@@ -4,7 +4,7 @@ import "./header.css";
 import "./../../index.css";
 
 type HeaderProps = {
-  settingsButtonAction: (state: boolean) => void;
+  settingsButtonAction: () => void;
 };
 
 const Header = ({ settingsButtonAction }: HeaderProps) => {
@@ -15,7 +15,7 @@ const Header = ({ settingsButtonAction }: HeaderProps) => {
       <div
         className="icon-button settings-button"
         onClick={() => {
-          settingsButtonAction(true);
+          settingsButtonAction();
         }}
       >
         <img

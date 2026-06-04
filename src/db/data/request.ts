@@ -1,7 +1,4 @@
-import type {
-  HttpRequest,
-  Method,
-} from "./data-manager-interface";
+import type { HttpRequest, Method } from "./data-manager-interface";
 
 export class Request implements HttpRequest {
   readonly id: string = crypto.randomUUID();
@@ -13,17 +10,13 @@ export class Request implements HttpRequest {
   body?: Record<string, unknown>;
 
   constructor(
-    collectionId: string,
     url: string,
     method: Method,
     params: Record<string, string | number> = {},
     headers: Record<string, string | number> = {},
-    body?: Record<string, unknown>
+    body?: Record<string, unknown>,
+    collectionId?: string,
   ) {
-    if (!collectionId.trim()) {
-      throw new Error("collectionId cannot be empty");
-    }
-
     if (!url.trim()) {
       throw new Error("url cannot be empty");
     }
@@ -157,9 +150,3 @@ export class Request implements HttpRequest {
     this.body = body;
   }
 }
-
-
-
-
-
-

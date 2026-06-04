@@ -11,7 +11,7 @@
   transform: translateX(-50%);
   display: flex;
   flex-direction: row;
-  color: var(--page-title-color);
+  color: var(--primary-color);
 }
 
 .page-title-logo {
@@ -27,3 +27,4 @@
 .settings-button {
   margin: 0rem auto 0rem 1.5rem;
 }
+

@@ -1,0 +1,41 @@
+aside {
+  /* change the width */
+  width: 26vw;
+  height: 100vh;
+  border: 0.2rem solid var(--component-border);
+  background-color: var(--page-secondary-background);
+  padding: 0rem;
+}
+
+.request-list {
+  list-style-type: none;
+  padding: 1rem 0rem;
+  margin: 1rem;
+  border: 0.2rem solid var(--component-border);
+  border-radius: 1rem;
+}
+
+.sidebar-view-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar-view-button {
+  width: 50%;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  padding: 0.5rem;
+}
+
+.sidebar-view-button:not(.sidebar-active-view):hover {
+  background-color: var(--text-button-hover);
+}
+
+.sidebar-view-button.sidebar-active-view {
+  border-bottom: 0.2rem solid var(--primary-color);
+}
+
+.view-conatainer {
+    overflow: auto;
+}
