@@ -50,7 +50,9 @@ const RequestItem = ({ request }: RequestItemProps) => {
                         key={collection.id}
                         className="collection-dropdown-item"
                         onClick={() => {
-                          request.setCollectionId(collection.id);
+                          storage.getManager().updateRequest(request.id, {
+                            collectionId: collection.id,
+                          });
                           setOpenCollections(false);
                           refreshStorage();
                         }}
