@@ -32,7 +32,7 @@ const Sidebar = () => {
             Collections
           </button>
         </div>
-        <div view-conatainer>
+        <div className="view-conatainer">
           {view === SidebarView.HISTORY ? <History /> : <Collections />}
         </div>
       </aside>

@@ -6,16 +6,16 @@ import {
 import { useTheme } from "../../../../theme/theme-context";
 import { useStorage } from "../../../../../db/storage-context";
 import RequestItem from "../../request-item/request-item";
-import "./collection.css"
+import "./collection.css";
 
 type CollectionProps = {
   collection: Collection;
 };
 
 const CollectionComponent = ({ collection }: CollectionProps) => {
-  const [isCollectionOpen, setCollectionOpen] = useState(collection.isOpen);
   const { theme } = useTheme();
   const [storage, refeshStorage] = useStorage();
+  const isCollectionOpen = collection.isOpen;
 
   return (
     <>
@@ -24,18 +24,12 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
           <div
             className="icon-button folder-button"
             onClick={() => {
-              setCollectionOpen((prev) => {
-                const next = !prev;
+              storage
+                .getManager()
+                .getCollectionById(collection.id)
+                .setOpen(!isCollectionOpen);
 
-                storage
-                  .getManager()
-                  .getCollectionById(collection.id)
-                  .setOpen(next);
-
-                refeshStorage();
-
-                return next;
-              });
+              refeshStorage();
             }}
           >
             <img
@@ -56,7 +50,7 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
                   collection.id,
                   event.currentTarget.textContent ?? ""
                 );
-              refeshStorage;
+              refeshStorage();
             }}
           >
             {collection.title}
@@ -68,7 +62,7 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
               .getManager()
               .getRequestsFromCollectionById(collection.id)
               .map((request) => {
-                return <RequestItem request={request} />;
+                return <RequestItem key={request.id} request={request} />;
               })}
           </ul>
         )}

@@ -12,7 +12,7 @@ const Collections = () => {
           .getManager()
           .getAllCollections()
           .map((collection) => {
-            return <CollectionComponent collection={collection} />;
+            return <CollectionComponent key={collection.id} collection={collection} />;
           })}
       </ul>
     </>

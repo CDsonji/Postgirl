@@ -32,7 +32,7 @@ function App() {
         />
       )}
       <main className="main">
-        {isSmallScreen ? asideIsOpen && <Sidebar /> : <Sidebar />}
+        {(!isSmallScreen || asideIsOpen) && <Sidebar />}
       </main>
     </>
   );

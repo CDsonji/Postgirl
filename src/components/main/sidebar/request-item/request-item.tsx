@@ -50,7 +50,8 @@ const RequestItem = ({ request }: RequestItemProps) => {
                         key={collection.id}
                         className="collection-dropdown-item"
                         onClick={() => {
-                          request.collectionId = collection.id;
+                          request.setCollectionId(collection.id);
+                          setOpenCollections(false);
                           refreshStorage();
                         }}
                       >
@@ -60,10 +61,13 @@ const RequestItem = ({ request }: RequestItemProps) => {
                 </ul>
               )}
             </div>
-
             <div
               className="request-item-button delete-button"
-              onClick={() => {}}
+              onClick={() => {
+                storage.getManager().removeRequest(request.id);
+                setOpenCollections(false);
+                refreshStorage();
+              }}
             >
               <img
                 className="request-item-button-icon"
