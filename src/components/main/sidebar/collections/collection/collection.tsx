@@ -6,6 +6,7 @@ import {
 import { useTheme } from "../../../../theme/theme-context";
 import { useStorage } from "../../../../../db/storage-context";
 import RequestItem from "../../request-item/request-item";
+import "./collection.css"
 
 type CollectionProps = {
   collection: Collection;
@@ -25,14 +26,11 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
             onClick={() => {
               setCollectionOpen((prev) => {
                 const next = !prev;
-                try {
-                  storage
-                    .getManager()
-                    .getCollectionById(collection.id)
-                    .setOpen(next);
-                } catch (error) {
-                  console.error(error);
-                }
+
+                storage
+                  .getManager()
+                  .getCollectionById(collection.id)
+                  .setOpen(next);
 
                 refeshStorage();
 
@@ -63,6 +61,8 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
           >
             {collection.title}
           </h3>
+        </div>
+        {isCollectionOpen && (
           <ul className="request-list">
             {storage
               .getManager()
@@ -71,7 +71,7 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
                 return <RequestItem request={request} />;
               })}
           </ul>
-        </div>
+        )}
       </li>
     </>
   );

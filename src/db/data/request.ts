@@ -1,6 +1,6 @@
-import type { Request, Method } from "./data-manager-interface";
+import type { HttpRequest, Method } from "./data-manager-interface";
 
-export class HttpRequest implements Request {
+export class Request implements HttpRequest {
   readonly id: string = crypto.randomUUID();
   collectionId?: string;
   url: string;

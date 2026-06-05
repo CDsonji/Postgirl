@@ -1,0 +1,15 @@
+.collection-item {
+    margin-top: 2rem;
+}
+
+.collection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 2rem;
+}
+
+.collection-title {
+    font-size: 1.5rem;
+    margin: 0rem 0rem 0rem 0.5rem;
+}

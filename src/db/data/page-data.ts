@@ -1,17 +1,16 @@
-import { Theme, type Collection, type Data } from "./data-manager-interface";
-import type { HttpRequest } from "./http-request";
-import type { RequestCollection } from "./request-collection";
+import { Theme, type Collection, type Data, type HttpRequest } from "./data-manager-interface";
+
 
 export class PageData implements Data {
-  requests: Record<string, Request>;
-  collections: Record<string, >;
+  requests: Record<string, HttpRequest>;
+  collections: Record<string, Collection>;
   history: Record<number, HttpRequest>;
   theme: Theme;
 
   constructor(
-    requests: Record<string, Request> = {},
+    requests: Record<string, HttpRequest> = {},
     collections: Record<string, Collection> = {},
-    history: Record<number, Request> = {},
+    history: Record<number, HttpRequest> = {},
     theme: Theme = Theme.DARK
   ) {
     this.requests = requests ?? {};

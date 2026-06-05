@@ -1,9 +1,10 @@
-import { type Data, type DataManager } from "../data/data-manager-interface";
+import { type Data, type DataManager, type HttpRequest } from "../data/data-manager-interface";
 import { Database } from "../data/data-base";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
 import { PageData } from "../data/page-data";
 import { RequestCollection } from "../data/request-collection";
-import { HttpRequest } from "../data/http-request";
+import { Request } from "../data/request";
+
 
 const sample = `{
   "requests": {
@@ -103,7 +104,7 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     const requests: Record<string, HttpRequest> = {};
 
     for (const [id, r] of Object.entries(raw)) {
-      const request = new HttpRequest(
+      const request = new Request(
         r.id ?? id,
         r.url,
         r.method,

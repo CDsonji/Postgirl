@@ -3,14 +3,12 @@ import {
   type Collection,
   type Data,
   type DataManager,
-  type Request,
+  type HttpRequest,
 } from "./data-manager-interface";
 import { PageData } from "./page-data";
-import type { HttpRequest } from "./http-request";
-import type { RequestCollection } from "./request-collection";
 
 export class Database implements DataManager {
-  private data: PageData;
+  private data: Data;
 
   constructor(
     data: Data = {
@@ -94,7 +92,7 @@ export class Database implements DataManager {
     return this.findRequestById(id) !== undefined;
   }
 
-  getCollectionById(id: string): RequestCollection {
+  getCollectionById(id: string): Collection {
     if (!id.trim()) {
       throw new Error("Collection id cannot be empty");
     }
@@ -108,7 +106,7 @@ export class Database implements DataManager {
     return collection;
   }
 
-  findCollectionById(id: string): RequestCollection | undefined {
+  findCollectionById(id: string): Collection | undefined {
     if (!id.trim()) {
       return undefined;
     }
@@ -124,7 +122,7 @@ export class Database implements DataManager {
     return Object.values(this.data.requests);
   }
 
-  getAllCollections(): RequestCollection[] {
+  getAllCollections(): Collection[] {
     return Object.values(this.data.collections);
   }
 
@@ -162,7 +160,7 @@ export class Database implements DataManager {
     return request;
   }
 
-  addCollection(collection: RequestCollection): void {
+  addCollection(collection: Collection): void {
     if (this.hasCollection(collection.id)) {
       throw new Error(`Collection with id "${collection.id}" already exists`);
     }
@@ -181,7 +179,7 @@ export class Database implements DataManager {
     collection.title = `${title} (${count + 1})`;
   }
 
-  removeCollection(id: string): RequestCollection {
+  removeCollection(id: string): Collection {
     const collection = this.getCollectionById(id);
 
     const requestsInCollection = this.getRequestsFromCollectionById(id);
