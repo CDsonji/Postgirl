@@ -4,7 +4,6 @@ import {
   useEffect,
   useMemo,
   useCallback,
-  useState,
   type PropsWithChildren,
 } from "react";
 import { useStorage } from "../../db/storage-context";
@@ -19,19 +18,22 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export function ThemeProvider({ children }: PropsWithChildren) {
   const [storage, refreshStorage] = useStorage();
-  const [theme, setTheme] = useState<Theme>(storage.getData().theme);
+
+  const theme = storage.getData().theme;
 
   const toggleTheme = useCallback(() => {
     storage.getManager().toggleTheme();
     refreshStorage();
-    setTheme(storage.getData().theme);
-  }, [storage]);
+  }, [storage, refreshStorage]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
-  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
+  const value = useMemo(
+    () => ({ theme, toggleTheme }),
+    [theme, toggleTheme]
+  );
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
