@@ -18,7 +18,7 @@
 }
 
 .request-item-method {
-  text-align: right;
+  text-align: center;
 }
 
 .request-item-url {
@@ -54,4 +54,31 @@
 
 .request-item-button-icon {
   height: 1.5rem;
+}
+
+.collection-dropdown {
+  list-style-type: none;
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 10rem;
+  background-color: var(--request-list-item-hover);
+  border: 0.2rem solid var(--component-border);
+  border-radius: 0.5rem;
+  padding-left: 0rem;
+  font-size: 1.5rem;
+}
+
+.collection-dropdown-item {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.collection-dropdown-item:not(:last-child) {
+  border-bottom: 0.2rem solid var(--component-border);
+}
+
+.collection-dropdown-item:hover {
+  background-color: var(--icon-hover );
 }

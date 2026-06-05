@@ -1,27 +1,21 @@
-import { Method } from "../../../../db/data/data-manager-interface";
-import { Request } from "../../../../db/data/request";
+import { useStorage } from "../../../../db/storage-context";
 import RequestItem from "../request-item/request-item";
 
 const History = () => {
+  const [storage] = useStorage();
+
   return (
     <>
-      {/* testing request-item */}
       <ul className="request-list">
-        <RequestItem
-          request={new Request("https://localhost:8000", Method.GET)}
-        />
-        <RequestItem
-          request={new Request("https://localhost:8000/products", Method.PATCH)}
-        />
-        <RequestItem
-          request={new Request("https://localhost:8000/studetnssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss", Method.HEAD)}
-        />
-        <RequestItem
-          request={new Request("https://localhost:8000/teachers", Method.OPTIONS)}
-        />
+        {storage
+          .getManager()
+          .getRequestHistory()
+          .map((request) => (
+            <RequestItem request={request} />
+          ))}
       </ul>
     </>
   );
 };
 
-export default History
+export default History;

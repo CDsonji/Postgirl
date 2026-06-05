@@ -1,7 +1,75 @@
-import type { Data, DataManager } from "../data/data-manager-interface";
+import { type Data, type DataManager } from "../data/data-manager-interface";
 import { Database } from "../data/data-base";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
 import { PageData } from "../data/page-data";
+import { RequestCollection } from "../data/request-collection";
+import { HttpRequest } from "../data/http-request";
+
+const sample = `{
+  "requests": {
+    "req-1": {
+      "id": "req-1",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "GET",
+      "params": {
+        "page": 1,
+        "limit": 10
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer token123"
+      },
+      "body": {
+        "name": "Alice",
+        "age": 25
+      }
+    },
+    "req-2": {
+      "id": "req-2",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "POST",
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Bob"
+      }
+    }
+  },
+  "collections": {
+    "col-1": {
+      "id": "col-1",
+      "title": "Users",
+      "isOpen": "true"
+    },
+    "col-2": {
+      "id": "col-2",
+      "title": "Auth",
+      "isOpen": "false"
+    }
+  },
+  "history": {
+    "1710000000000": {
+      "id": "req-1",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "GET",
+      "params": {
+        "page": 1
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Alice"
+      }
+    }
+  },
+  "theme": "Light-Mode"
+}`;
 
 export class BrowserLocalStorageManager implements LocalStorageManager {
   private readonly storageKey: string;
@@ -15,8 +83,46 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     return this.storageKey;
   }
 
+  rehydrateCollections(
+    raw: Record<string, any> = {}
+  ): Record<string, RequestCollection> {
+    const collections: Record<string, RequestCollection> = {};
+
+    for (const [id, c] of Object.entries(raw)) {
+      const collection = new RequestCollection(c.title, c.isOpen);
+      (collection as any).id = id;
+      collections[id] = collection;
+    }
+
+    return collections;
+  }
+
+  rehydrateRequests(
+    raw: Record<string, any> = {}
+  ): Record<string, HttpRequest> {
+    const requests: Record<string, HttpRequest> = {};
+
+    for (const [id, r] of Object.entries(raw)) {
+      const request = new HttpRequest(
+        r.id ?? id,
+        r.url,
+        r.method,
+        r.params ?? {},
+        r.headers ?? {},
+        r.body,
+        r.collectionId
+      );
+
+      requests[id] = request;
+    }
+
+    return requests;
+  }
+
   initialize(): void {
-    const rawData = localStorage.getItem(this.storageKey);
+    // const rawData = localStorage.getItem(this.storageKey);
+
+    const rawData = sample;
 
     if (!rawData) {
       this.manager = new Database(new PageData());
@@ -26,11 +132,15 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     try {
       const parsedData = JSON.parse(rawData) as Partial<Data>;
 
+      const history = this.rehydrateRequests(parsedData.history);
+      const collections = this.rehydrateCollections(parsedData.collections);
+      const requests = this.rehydrateRequests(parsedData.requests);
+
       this.manager = new Database(
         new PageData(
-          parsedData.requests ?? {},
-          parsedData.collections ?? {},
-          parsedData.history ?? {},
+          requests ?? {},
+          collections ?? {},
+          history ?? {},
           parsedData.theme
         )
       );

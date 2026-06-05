@@ -3,12 +3,14 @@ import {
   type Collection,
   type Data,
   type DataManager,
-  type HttpRequest,
+  type Request,
 } from "./data-manager-interface";
 import { PageData } from "./page-data";
+import type { HttpRequest } from "./http-request";
+import type { RequestCollection } from "./request-collection";
 
 export class Database implements DataManager {
-  private data: Data;
+  private data: PageData;
 
   constructor(
     data: Data = {
@@ -92,7 +94,7 @@ export class Database implements DataManager {
     return this.findRequestById(id) !== undefined;
   }
 
-  getCollectionById(id: string): Collection {
+  getCollectionById(id: string): RequestCollection {
     if (!id.trim()) {
       throw new Error("Collection id cannot be empty");
     }
@@ -106,7 +108,7 @@ export class Database implements DataManager {
     return collection;
   }
 
-  findCollectionById(id: string): Collection | undefined {
+  findCollectionById(id: string): RequestCollection | undefined {
     if (!id.trim()) {
       return undefined;
     }
@@ -122,7 +124,7 @@ export class Database implements DataManager {
     return Object.values(this.data.requests);
   }
 
-  getAllCollections(): Collection[] {
+  getAllCollections(): RequestCollection[] {
     return Object.values(this.data.collections);
   }
 
@@ -152,20 +154,6 @@ export class Database implements DataManager {
     this.data.requests[request.id] = request;
   }
 
-  updateRequest(request: HttpRequest): void {
-    if (!this.hasRequest(request.id)) {
-      throw new Error(`Request with id "${request.id}" does not exist`);
-    }
-
-    if (request.collectionId && !this.hasCollection(request.collectionId)) {
-      throw new Error(
-        `Collection with id "${request.collectionId}" does not exist`
-      );
-    }
-
-    this.data.requests[request.id] = request;
-  }
-
   removeRequest(id: string): HttpRequest {
     const request = this.getRequestById(id);
 
@@ -174,7 +162,7 @@ export class Database implements DataManager {
     return request;
   }
 
-  addCollection(collection: Collection): void {
+  addCollection(collection: RequestCollection): void {
     if (this.hasCollection(collection.id)) {
       throw new Error(`Collection with id "${collection.id}" already exists`);
     }
@@ -182,15 +170,18 @@ export class Database implements DataManager {
     this.data.collections[collection.id] = collection;
   }
 
-  updateCollection(collection: Collection): void {
-    if (!this.hasCollection(collection.id)) {
-      throw new Error(`Collection with id "${collection.id}" does not exist`);
-    }
+  renameCollection(collectionId: string, title: string): void {
+    const collections = Object.values(this.data.collections);
 
-    this.data.collections[collection.id] = collection;
+    const count = collections.filter((c) => c.title === title).length;
+
+    const collection = this.data.collections[collectionId];
+    if (!collection) return;
+
+    collection.title = `${title} (${count + 1})`;
   }
 
-  removeCollection(id: string): Collection {
+  removeCollection(id: string): RequestCollection {
     const collection = this.getCollectionById(id);
 
     const requestsInCollection = this.getRequestsFromCollectionById(id);

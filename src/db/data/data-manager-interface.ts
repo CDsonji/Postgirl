@@ -19,7 +19,7 @@ export const Theme = {
 
 export type Theme = (typeof Theme)[keyof typeof Theme];
 
-export interface HttpRequest {
+export interface Request {
   id: string;
   collectionId?: string;
   url: string;
@@ -27,9 +27,6 @@ export interface HttpRequest {
   params: Record<string, string | number>;
   headers: Record<string, string | number>;
   body?: Record<string, unknown>;
-  setCollectionId(collectionId: string): void;
-  setUrl(url: string): void;
-  setMethod(method: Method): void;
   getParam(key: string): string | number;
   addParam(key: string, value: string | number): void;
   removeParam(key: string): string | number;
@@ -43,44 +40,46 @@ export interface HttpRequest {
 export interface Collection {
   id: string;
   title: string;
+  isOpen: boolean;
+  setTitle(title: string): void;
+  setOpen(state: boolean): void;
 }
 
 export interface Data {
-  requests: Record<string, HttpRequest>;
+  requests: Record<string, Request>;
   collections: Record<string, Collection>;
-  history: Record<string, HttpRequest>;
-  theme: Theme
+  history: Record<string, Request>;
+  theme: Theme;
 }
 
 export interface DataManager {
   getData(): Data;
 
-  getRequestById(id: string): HttpRequest;
+  getRequestById(id: string): Request;
   getCollectionById(id: string): Collection;
 
-  getAllRequests(): HttpRequest[];
+  getAllRequests(): Request[];
   getAllCollections(): Collection[];
-  getRequestsFromCollectionById(collectionId: string): HttpRequest[];
+  getRequestsFromCollectionById(collectionId: string): Request[];
 
-  getRequestHistory(): HttpRequest[];
-  getPartialRequestHistory(start: number, end: number): HttpRequest[];
-  addRequestToHistory(request: HttpRequest): void;
-  removeRequestFromHistory(timestamp: number): HttpRequest;
+  getRequestHistory(): Request[];
+  getPartialRequestHistory(start: number, end: number): Request[];
+  addRequestToHistory(request: Request): void;
+  removeRequestFromHistory(timestamp: number): Request;
 
   hasRequest(id: string): boolean;
   hasCollection(id: string): boolean;
 
-  addRequest(request: HttpRequest): void;
-  updateRequest(request: HttpRequest): void;
-  removeRequest(id: string): HttpRequest;
+  addRequest(request: Request): void;
+  removeRequest(id: string): Request;
 
   addCollection(collection: Collection): void;
-  updateCollection(collection: Collection): void;
+  renameCollection(collectionId: string, title: string): void;
   removeCollection(id: string): Collection;
 
   clearRequests(): void;
   clearCollections(): void;
   clearAll(): void;
 
-  toggleTheme(): void
+  toggleTheme(): void;
 }

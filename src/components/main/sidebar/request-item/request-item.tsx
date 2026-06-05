@@ -13,40 +13,58 @@ type RequestItemProps = {
 
 const RequestItem = ({ request }: RequestItemProps) => {
   const { theme } = useTheme();
-  const storage = useStorage();
+  const [storage, refreshStorage] = useStorage();
 
   const [openCollections, setOpenCollections] = useState(false);
-
-  const toggleOpenCollections = () => {
-    setOpenCollections(!openCollections);
-  };
 
   return (
     <>
       <li className="request-item-container">
         <div className="request-item">
-            <div className="request-item-method">
-              <span className={`${request.method} method`}>
-                {request.method}
-              </span>
-            </div>
-            <div className="request-item-url">{request.url}</div>
+          <div className="request-item-method">
+            <span className={`${request.method} method`}>{request.method}</span>
+          </div>
+          <div className="request-item-url">{request.url}</div>
           <div className="request-item-buttons">
             <div
-              className={`request-item-button add-button ${
-                openCollections ? "active" : ""
-              }`}
-              onClick={() => toggleOpenCollections}
+              className="request-item-button add-button-wrapper"
+              onMouseEnter={() => setOpenCollections(true)}
+              onMouseLeave={() => setOpenCollections(false)}
             >
-              <img
-                className="request-item-button-icon"
-                src={`./../../../../src/assets/add-${
-                  theme === Theme.LIGHT ? "light" : "dark"
-                }.svg`}
-                alt="add-logo"
-              />
+              <div className="add-button" title="Add To Collection">
+                <img
+                  className="request-item-button-icon"
+                  src={`./../../../../src/assets/add-${
+                    theme === Theme.LIGHT ? "light" : "dark"
+                  }.svg`}
+                  alt="add-logo"
+                />
+              </div>
+              {openCollections && (
+                <ul className="collection-dropdown">
+                  {storage
+                    .getManager()
+                    .getAllCollections()
+                    .map((collection) => (
+                      <li
+                        key={collection.id}
+                        className="collection-dropdown-item"
+                        onClick={() => {
+                          request.collectionId = collection.id;
+                          refreshStorage();
+                        }}
+                      >
+                        {collection.title}
+                      </li>
+                    ))}
+                </ul>
+              )}
             </div>
-            <div className="request-item-button delete-button" onClick={() => {}}>
+
+            <div
+              className="request-item-button delete-button"
+              onClick={() => {}}
+            >
               <img
                 className="request-item-button-icon"
                 src={`./../../../../src/assets/delete-${
@@ -57,24 +75,6 @@ const RequestItem = ({ request }: RequestItemProps) => {
             </div>
           </div>
         </div>
-        <ul className="collection-dropdown">
-          {storage
-            .getManager()
-            .getAllCollections()
-            .map((collection) => {
-              return (
-                <li
-                  className="collection-dropdown-item"
-                  onClick={() => {
-                    request.setCollectionId(collection.id);
-                    storage.save();
-                  }}
-                >
-                  {collection.title}
-                </li>
-              );
-            })}
-        </ul>
       </li>
     </>
   );
