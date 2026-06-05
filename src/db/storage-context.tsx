@@ -16,7 +16,7 @@ type StorageContextType = {
 const StorageContext = createContext<StorageContextType | null>(null);
 
 export function StorageProvider({ children }: { children: ReactNode }) {
-  const storageRef = useRef(new BrowserLocalStorageManager());
+  const storageRef = useRef<BrowserLocalStorageManager | null>(null);
 
   if (!storageRef.current) {
     storageRef.current = new BrowserLocalStorageManager();
@@ -25,26 +25,29 @@ export function StorageProvider({ children }: { children: ReactNode }) {
 
   const [, setData] = useState<Data>(storageRef.current.getData());
 
-  const refreshData = () => {
+  const refreshStorage = () => {
     storageRef.current!.save();
     setData(storageRef.current!.getData());
   };
 
   return (
     <StorageContext.Provider
-      value={{ storage: storageRef.current, refreshStorage: refreshData }}
+      value={{
+        storage: storageRef.current,
+        refreshStorage,
+      }}
     >
       {children}
     </StorageContext.Provider>
   );
 }
 
-export function useStorage(): [BrowserLocalStorageManager, () => void] {
+export function useStorage() {
   const context = useContext(StorageContext);
 
   if (!context) {
     throw new Error("useStorage must be used inside StorageProvider");
   }
 
-  return [context.storage, context.refreshStorage];
+  return [context.storage, context.refreshStorage] as const;
 }

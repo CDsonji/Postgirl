@@ -1,10 +1,12 @@
-import { type Data, type DataManager, type HttpRequest } from "../data/data-manager-interface";
+import {
+  Theme,
+  type Collection,
+  type Data,
+  type DataManager,
+  type HttpRequest,
+} from "../data/data-manager-interface";
 import { Database } from "../data/data-base";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
-import { PageData } from "../data/page-data";
-import { RequestCollection } from "../data/request-collection";
-import { Request } from "../data/request";
-
 
 const sample = `{
   "requests": {
@@ -44,12 +46,12 @@ const sample = `{
     "col-1": {
       "id": "col-1",
       "title": "Users",
-      "isOpen": "true"
+      "isOpen": true
     },
     "col-2": {
       "id": "col-2",
       "title": "Auth",
-      "isOpen": "false"
+      "isOpen": false
     }
   },
   "history": {
@@ -72,6 +74,53 @@ const sample = `{
   "theme": "Light-Mode"
 }`;
 
+function normalizeHttpRequest(raw: any, fallbackId: string): HttpRequest {
+  return {
+    id: raw?.id ?? fallbackId,
+    collectionId: raw?.collectionId,
+    url: String(raw?.url ?? ""),
+    method: raw?.method,
+    params: raw?.params ?? {},
+    headers: raw?.headers ?? {},
+    body: raw?.body,
+  };
+}
+
+function normalizeCollection(raw: any, fallbackId: string): Collection {
+  return {
+    id: raw?.id ?? fallbackId,
+    title: String(raw?.title ?? ""),
+    isOpen: Boolean(raw?.isOpen),
+  };
+}
+
+function normalizeData(parsed: Partial<Data>): Data {
+  const requests: Record<string, HttpRequest> = {};
+  const collections: Record<string, Collection> = {};
+  const history: Record<string, HttpRequest> = {};
+
+  for (const [id, rawRequest] of Object.entries(parsed.requests ?? {})) {
+    requests[id] = normalizeHttpRequest(rawRequest, id);
+  }
+
+  for (const [id, rawCollection] of Object.entries(parsed.collections ?? {})) {
+    collections[id] = normalizeCollection(rawCollection, id);
+  }
+
+  for (const [timestamp, rawHistoryRequest] of Object.entries(
+    parsed.history ?? {}
+  )) {
+    history[timestamp] = normalizeHttpRequest(rawHistoryRequest, timestamp);
+  }
+
+  return {
+    requests,
+    collections,
+    history,
+    theme: parsed.theme ?? Theme.DARK,
+  };
+}
+
 export class BrowserLocalStorageManager implements LocalStorageManager {
   private readonly storageKey: string;
   private manager: DataManager | null = null;
@@ -84,71 +133,20 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     return this.storageKey;
   }
 
-  rehydrateCollections(
-    raw: Record<string, any> = {}
-  ): Record<string, RequestCollection> {
-    const collections: Record<string, RequestCollection> = {};
-
-    for (const [id, c] of Object.entries(raw)) {
-      const collection = new RequestCollection(c.title, c.isOpen);
-      (collection as any).id = id;
-      collections[id] = collection;
-    }
-
-    return collections;
-  }
-
-  rehydrateRequests(
-    raw: Record<string, any> = {}
-  ): Record<string, HttpRequest> {
-    const requests: Record<string, HttpRequest> = {};
-
-    for (const [id, r] of Object.entries(raw)) {
-      const request = new Request(
-        r.id ?? id,
-        r.url,
-        r.method,
-        r.params ?? {},
-        r.headers ?? {},
-        r.body,
-        r.collectionId
-      );
-
-      requests[id] = request;
-    }
-
-    return requests;
-  }
-
   initialize(): void {
-    // const rawData = localStorage.getItem(this.storageKey);
-
-    const rawData = sample;
-
-    if (!rawData) {
-      this.manager = new Database(new PageData());
-      return;
-    }
+    const rawData =
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem(this.storageKey) ?? sample
+        : sample;
 
     try {
       const parsedData = JSON.parse(rawData) as Partial<Data>;
+      const normalized = normalizeData(parsedData);
 
-      const history = this.rehydrateRequests(parsedData.history);
-      const collections = this.rehydrateCollections(parsedData.collections);
-      const requests = this.rehydrateRequests(parsedData.requests);
-
-      this.manager = new Database(
-        new PageData(
-          requests ?? {},
-          collections ?? {},
-          history ?? {},
-          parsedData.theme
-        )
-      );
+      this.manager = new Database(normalized);
     } catch (error) {
-      console.error("Failed to parse localStorage data:", error);
-
-      this.manager = new Database(new PageData());
+      console.error("Failed to parse storage data:", error);
+      this.manager = new Database();
     }
   }
 
@@ -157,7 +155,11 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
       this.initialize();
     }
 
-    return this.manager as DataManager;
+    if (!this.manager) {
+      throw new Error("BrowserLocalStorageManager failed to initialize");
+    }
+
+    return this.manager;
   }
 
   getData(): Data {
@@ -165,50 +167,11 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
   }
 
   save(): void {
+    if (typeof localStorage === "undefined") return;
+
     localStorage.setItem(
       this.storageKey,
       JSON.stringify(this.getManager().getData())
     );
   }
-
-  // clear(): void {
-  //   localStorage.removeItem(this.storageKey);
-  //   this.manager = new Database({
-  //     requests: {},
-  //     collections: {},
-  //     history: {},
-  //   });
-  // }
-
-  // addRequest(request: HttpRequest): void {
-  //   this.getManager().addRequest(request);
-  //   this.save();
-  // }
-
-  // updateRequest(request: HttpRequest): void {
-  //   this.getManager().updateRequest(request);
-  //   this.save();
-  // }
-
-  // removeRequest(id: string): HttpRequest {
-  //   const removed = this.getManager().removeRequest(id);
-  //   this.save();
-  //   return removed;
-  // }
-
-  // addCollection(collection: Collection): void {
-  //   this.getManager().addCollection(collection);
-  //   this.save();
-  // }
-
-  // updateCollection(collection: Collection): void {
-  //   this.getManager().updateCollection(collection);
-  //   this.save();
-  // }
-
-  // removeCollection(id: string): Collection {
-  //   const removed = this.getManager().removeCollection(id);
-  //   this.save();
-  //   return removed;
-  // }
 }

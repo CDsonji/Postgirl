@@ -1,21 +1,8 @@
-import type { Data, DataManager} from "../data/data-manager-interface";
-
+import type { DataManager } from "../data/data-manager-interface";
 
 export interface LocalStorageManager {
-  getStorageKey(): string;
-
   initialize(): void;
   getManager(): DataManager;
-  getData(): Data;
-
+  getData(): unknown;
   save(): void;
-  // clear(): void;
-
-  // addRequest(request: HttpRequest): void;
-  // updateRequest(request: HttpRequest): void;
-  // removeRequest(id: string): HttpRequest;
-
-  // addCollection(collection: Collection): void;
-  // updateCollection(collection: Collection): void;
-  // removeCollection(id: string): Collection;
 }

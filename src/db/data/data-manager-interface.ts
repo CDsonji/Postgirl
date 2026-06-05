@@ -27,25 +27,12 @@ export interface HttpRequest {
   params: Record<string, string | number>;
   headers: Record<string, string | number>;
   body?: Record<string, unknown>;
-  setCollectionId(collectionId: string): void;
-  setUrl(url: string): void;
-  setMethod(method: Method): void;
-  getParam(key: string): string | number;
-  addParam(key: string, value: string | number): void;
-  removeParam(key: string): string | number;
-  getHeader(key: string): string | number;
-  addHeader(key: string, value: string | number): void;
-  removeHeader(key: string): string | number;
-  getBody(): Record<string, unknown>;
-  setBody(body: Record<string, unknown>): void;
 }
 
 export interface Collection {
-  isOpen: boolean;
   id: string;
   title: string;
-  setTitle(title: string): void;
-  setOpen(state: boolean): void;
+  isOpen: boolean;
 }
 
 export interface Data {
@@ -74,9 +61,14 @@ export interface DataManager {
   hasCollection(id: string): boolean;
 
   addRequest(request: HttpRequest): void;
+  updateRequest(requestId: string, updates: Partial<HttpRequest>): void;
   removeRequest(id: string): HttpRequest;
 
   addCollection(collection: Collection): void;
+  updateCollection(
+    collectionId: string,
+    updates: Partial<Omit<Collection, "id">>
+  ): void;
   renameCollection(collectionId: string, title: string): void;
   removeCollection(id: string): Collection;
 
