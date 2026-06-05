@@ -7,8 +7,8 @@
 
 :root[data-theme="Light-Mode"] {
   --page-primary-background: white;
-  --page-secondary-background: #cfcfcf;
-  --component-border: #919191;
+  --page-secondary-background: #ededed;
+  --component-border: #d6d6d6;
   --text-color: black;
   --request-list-item-hover: #afafaf;
   --icon-hover: rgba(0, 0, 0, 0.249);

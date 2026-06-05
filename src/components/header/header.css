@@ -25,6 +25,10 @@
 }
 
 .settings-button {
-  margin: 0rem auto 0rem 1.5rem;
+  margin: 0rem 1.5rem 0rem auto;
+}
+
+.aside-button {
+  margin: 0rem 0rem 0rem 1.5rem;
 }
 

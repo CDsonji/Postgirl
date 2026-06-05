@@ -5,13 +5,30 @@ import "./../../index.css";
 
 type HeaderProps = {
   settingsButtonAction: () => void;
+  sidebarButtonAction?: () => void;
 };
 
-const Header = ({ settingsButtonAction }: HeaderProps) => {
+const Header = ({ settingsButtonAction, sidebarButtonAction }: HeaderProps) => {
   const { theme } = useTheme();
 
   return (
     <header className="header">
+      {sidebarButtonAction && (
+        <div
+          className="icon-button aside-button"
+          onClick={() => {
+            sidebarButtonAction?.();
+          }}
+        >
+          <img
+            className="icon"
+            src={`./src/assets/aside-${
+              theme === Theme.LIGHT ? "light" : "dark"
+            }.svg`}
+            alt="aside-logo"
+          />
+        </div>
+      )}
       <div
         className="icon-button settings-button"
         onClick={() => {

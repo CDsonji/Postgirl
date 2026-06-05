@@ -2,9 +2,12 @@ import { useState } from "react";
 import Header from "./components/header/header";
 import Settings from "./components/settings/settings";
 import Sidebar from "./components/main/sidebar/sidebar";
+import { useMediaQuery } from "./utils/media-query";
 
 function App() {
   const [settingsIsOpen, setSettingsOpen] = useState(false);
+  const isSmallScreen = useMediaQuery("(max-width: 1237px)");
+  const [asideIsOpen, setAsideOpen] = useState(false);
 
   return (
     <>
@@ -12,7 +15,15 @@ function App() {
         settingsButtonAction={() => {
           setSettingsOpen(true);
         }}
+        sidebarButtonAction={
+          isSmallScreen
+            ? () => {
+                setAsideOpen((prev) => !prev);
+              }
+            : undefined
+        }
       />
+
       {settingsIsOpen && (
         <Settings
           exitButtonAction={() => {
@@ -21,7 +32,7 @@ function App() {
         />
       )}
       <main className="main">
-        <Sidebar />
+        {isSmallScreen ? asideIsOpen && <Sidebar /> : <Sidebar />}
       </main>
     </>
   );
