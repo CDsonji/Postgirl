@@ -9,6 +9,7 @@ import { BrowserLocalStorageManager } from "./local-storage/browser-local-storag
 import type { Data } from "./data/data-manager-interface";
 
 type StorageContextType = {
+  data: Data;
   storage: BrowserLocalStorageManager;
   refreshStorage: () => void;
 };
@@ -23,16 +24,18 @@ export function StorageProvider({ children }: { children: ReactNode }) {
     storageRef.current.initialize();
   }
 
-  const [, setData] = useState<Data>(storageRef.current.getData());
+  const [data, setData] = useState<Data>(storageRef.current.getData());
 
   const refreshStorage = () => {
     storageRef.current!.save();
+    console.log(storageRef.current!.getData().collections);
     setData(storageRef.current!.getData());
   };
 
   return (
     <StorageContext.Provider
       value={{
+        data,
         storage: storageRef.current,
         refreshStorage,
       }}
@@ -49,5 +52,5 @@ export function useStorage() {
     throw new Error("useStorage must be used inside StorageProvider");
   }
 
-  return [context.storage, context.refreshStorage] as const;
+  return [context.data, context.storage, context.refreshStorage] as const;
 }

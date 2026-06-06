@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Theme,
   type Collection,
@@ -14,8 +13,11 @@ type CollectionProps = {
 
 const CollectionComponent = ({ collection }: CollectionProps) => {
   const { theme } = useTheme();
-  const [storage, refeshStorage] = useStorage();
+  const [,storage, refeshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
+  console.log(collection)
+
+  // console.log("📊 Collection componen rendered!");
 
   return (
     <>
@@ -26,9 +28,7 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
             onClick={() => {
               storage
                 .getManager()
-                .getCollectionById(collection.id)
-                .setOpen(!isCollectionOpen);
-
+                .updateCollection(collection.id, { isOpen: !isCollectionOpen });
               refeshStorage();
             }}
           >

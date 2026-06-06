@@ -13,7 +13,7 @@ type RequestItemProps = {
 
 const RequestItem = ({ request }: RequestItemProps) => {
   const { theme } = useTheme();
-  const [storage, refreshStorage] = useStorage();
+  const [,storage, refreshStorage] = useStorage();
 
   const [openCollections, setOpenCollections] = useState(false);
 

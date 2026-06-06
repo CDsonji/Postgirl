@@ -17,9 +17,9 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export function ThemeProvider({ children }: PropsWithChildren) {
-  const [storage, refreshStorage] = useStorage();
+  const [data,storage, refreshStorage] = useStorage();
 
-  const theme = storage.getData().theme;
+  const theme = data.theme;
 
   const toggleTheme = useCallback(() => {
     storage.getManager().toggleTheme();

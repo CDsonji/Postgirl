@@ -163,8 +163,12 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
   }
 
   getData(): Data {
-    return this.getManager().getData();
-  }
+  // The spread operator {...} creates a NEW object container
+  // This ensures that (oldData === newData) becomes FALSE
+  return {
+    ...this.getManager().getData()
+  };
+}
 
   save(): void {
     if (typeof localStorage === "undefined") return;

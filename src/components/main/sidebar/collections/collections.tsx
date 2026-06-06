@@ -1,19 +1,19 @@
 import { useStorage } from "../../../../db/storage-context";
 import CollectionComponent from "./collection/collection";
-import "./collections.css"
+import "./collections.css";
 
 const Collections = () => {
-  const [storage] = useStorage();
+  const [data] = useStorage();
+  console.log("📊 Collections component rendered!");
 
   return (
     <>
       <ul className="collections-list">
-        {storage
-          .getManager()
-          .getAllCollections()
-          .map((collection) => {
-            return <CollectionComponent key={collection.id} collection={collection} />;
-          })}
+        {Object.values(data.collections).map((collection) => {
+          return (
+            <CollectionComponent key={collection.id} collection={collection} />
+          );
+        })}
       </ul>
     </>
   );
