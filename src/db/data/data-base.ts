@@ -28,6 +28,11 @@ export class Database implements DataManager {
       theme: data.theme ?? Theme.DARK,
     };
   }
+
+  getRequestTabs(): HttpRequest[] {
+    return Object.values(this.data.tabs);
+  }
+
   addTab(request: HttpRequest): void {
     this.data = {
       ...this.data,

@@ -41,6 +41,32 @@ const sample = `{
       "body": {
         "name": "Bob"
       }
+    },
+    "req-3": {
+      "id": "req-3",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "OPTIONS",
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Bob"
+      }
+    },
+    "req-4": {
+      "id": "req-4",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "HEAD",
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Bob"
+      }
     }
   },
   "collections": {
@@ -72,6 +98,78 @@ const sample = `{
       }
     }
   },
+  "tabs": {
+    "req-1": {
+      "id": "req-1",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "GET",
+      "params": {
+        "page": 1,
+        "limit": 10
+      },
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer token123"
+      },
+      "body": {
+        "name": "Alice",
+        "age": 25
+      }
+    },
+    "req-2": {
+      "id": "req-2",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "POST",
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Bob"
+      }
+    },
+    "req-3": {
+      "id": "req-3",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "OPTIONS",
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Bob"
+      }
+    },
+    "req-4": {
+      "id": "req-4",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "HEAD",
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Bob"
+      }
+    }
+  },
+  "activeTab":{
+      "id": "req-2",
+      "collectionId": "col-1",
+      "url": "https://api.example.com/users",
+      "method": "POST",
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Bob"
+      }
+    },
   "theme": "Light-Mode"
 }`;
 
@@ -143,10 +241,10 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
   initialize(): DataManager {
     let manager: DataManager;
 
-    const rawData =
-      typeof localStorage !== "undefined"
-        ? localStorage.getItem(this.storageKey) ?? sample
-        : sample;
+    const rawData = sample;
+      // typeof localStorage !== "undefined"
+      //   ? localStorage.getItem(this.storageKey) ?? sample
+      //   : sample;
 
     try {
       const parsedData = JSON.parse(rawData) as Partial<Data>;

@@ -1,7 +1,7 @@
 aside {
   /* change the width */
   width: 23vw;
-  height: 92vh;
+  height: 91vh;
   border: 0.2rem solid var(--component-border);
   background-color: var(--page-secondary-background);
   padding: 0rem;
@@ -9,7 +9,7 @@ aside {
 
 .request-list {
   list-style-type: none;
-  padding: 1rem 0rem;
+  padding: 0.5rem 0rem;
   margin: 1rem;
   border: 0.2rem solid var(--component-border);
   border-radius: 1rem;
@@ -19,6 +19,7 @@ aside {
 .sidebar-view-buttons {
   display: flex;
   flex-direction: row;
+  height: 4rem
 }
 
 .sidebar-view-button {
@@ -30,11 +31,29 @@ aside {
 }
 
 .sidebar-view-button:not(.sidebar-active-view):hover {
-  background-color: var(--text-button-hover);
+  background-color: var(--text-hover);
 }
 
 .sidebar-view-button.sidebar-active-view {
-  border-bottom: 0.2rem solid var(--primary-color);
+  border-top: 0.3rem solid var(--primary-color);
+  border-bottom-color: var(--page-secondary-background);
+}
+
+.sidebar-requests-button.sidebar-active-view {
+  border-right: 0.2rem solid var(--component-border);
+}
+
+.sidebar-collections-button.sidebar-active-view {
+  border-left: 0.2rem solid var(--component-border);
+}
+
+.sidebar-history-button.sidebar-active-view {
+  border-right: 0.2rem solid var(--component-border);
+  border-left: 0.2rem solid var(--component-border);
+}
+
+.sidebar-view-button {
+  border-bottom: 0.2rem solid var(--component-border);
 }
 
 .view-conatainer {

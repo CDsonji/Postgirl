@@ -74,6 +74,7 @@ export interface DataManager {
   renameCollection(collectionId: string, title: string): void;
   removeCollection(id: string): Collection;
 
+  getRequestTabs(): HttpRequest[]
   addTab(request: HttpRequest): void;
   updateCurrentTab(request: HttpRequest): void
   removeTab(requestId: string): HttpRequest;

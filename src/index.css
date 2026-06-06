@@ -10,8 +10,8 @@
   --page-secondary-background: #ededed;
   --component-border: #d6d6d6;
   --text-color: black;
-  --request-list-item-hover: #afafaf;
-  --icon-hover: rgba(0, 0, 0, 0.249);
+  --text-hover: #d7d7d7;
+  --icon-hover: #C0C0C0;
   --patch: #623497;
   --get: #007f31;
   --post: #b98d27;
@@ -26,8 +26,8 @@
   --page-secondary-background: #252525;
   --component-border: #535353;
   --text-color: white;
-  --request-list-item-hover: #363636;
-  --icon-hover: rgba(165, 165, 165, 0.249);
+  --text-hover: #363636;
+  --icon-hover: #4d4d4d;
   --patch: #c0a8e1;
   --get: #6bdd9a;
   --post: #e8d074;
@@ -51,7 +51,8 @@ html {
 body {
   background: var(--page-primary-background);
   color: var(--text-color);
-  height: 100%;
+  height: 100vh;
+  margin: 0rem;
 }
 
 .icon-button {

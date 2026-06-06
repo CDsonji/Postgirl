@@ -21,10 +21,10 @@ const RequestItem = ({ request }: RequestItemProps) => {
     <>
       <li className="request-item-container">
         <div className="request-item">
-          <div className="request-item-method">
+          <h4 className="request-item-method">
             <span className={`${request.method} method`}>{request.method}</span>
-          </div>
-          <div className="request-item-url">{request.url}</div>
+          </h4>
+          <h4 className="request-item-url">{request.url}</h4>
           <div className="request-item-buttons item-buttons">
             <div
               className="request-item-button add-button-wrapper"

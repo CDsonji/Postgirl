@@ -18,7 +18,7 @@ const Sidebar = () => {
       <aside>
         <div className="sidebar-view-buttons">
           <button
-            className={`sidebar-view-button ${
+            className={`sidebar-view-button sidebar-requests-button ${
               view === SidebarView.REQUESTS && "sidebar-active-view"
             }`}
             onClick={() => setView(SidebarView.REQUESTS)}
@@ -26,7 +26,7 @@ const Sidebar = () => {
             Requests
           </button>
           <button
-            className={`sidebar-view-button ${
+            className={`sidebar-view-button sidebar-history-button ${
               view === SidebarView.HISTORY && "sidebar-active-view"
             }`}
             onClick={() => setView(SidebarView.HISTORY)}
@@ -34,7 +34,7 @@ const Sidebar = () => {
             History
           </button>
           <button
-            className={`sidebar-view-button ${
+            className={`sidebar-view-button sidebar-collections-button ${
               view === SidebarView.COLLECTIONS && "sidebar-active-view"
             }`}
             onClick={() => setView(SidebarView.COLLECTIONS)}
