@@ -6,11 +6,10 @@ import {
   type ReactNode,
 } from "react";
 import { BrowserLocalStorageManager } from "./local-storage/browser-local-storage-manager";
-import type { Data } from "./data/data-manager-interface";
+import type { Data, DataManager } from "./data/data-manager-interface";
 
 type StorageContextType = {
-  data: Data;
-  storage: BrowserLocalStorageManager;
+  db: DataManager;
   refreshStorage: () => void;
 };
 
@@ -19,24 +18,24 @@ const StorageContext = createContext<StorageContextType | null>(null);
 export function StorageProvider({ children }: { children: ReactNode }) {
   const storageRef = useRef<BrowserLocalStorageManager | null>(null);
 
+  let manager: DataManager;
   if (!storageRef.current) {
     storageRef.current = new BrowserLocalStorageManager();
-    storageRef.current.initialize();
+    manager = storageRef.current.initialize();
   }
 
-  const [data, setData] = useState<Data>(storageRef.current.getData());
+  const [db, setDb] = useState<DataManager>(manager!);
 
   const refreshStorage = () => {
-    storageRef.current!.save();
-    console.log(storageRef.current!.getData().collections);
-    setData(storageRef.current!.getData());
+    const manager = storageRef.current!.save(db);
+    // console.log(storageRef.current!.getData().collections);
+    setDb(manager);
   };
 
   return (
     <StorageContext.Provider
       value={{
-        data,
-        storage: storageRef.current,
+        db,
         refreshStorage,
       }}
     >
@@ -52,5 +51,5 @@ export function useStorage() {
     throw new Error("useStorage must be used inside StorageProvider");
   }
 
-  return [context.data, context.storage, context.refreshStorage] as const;
+  return [context.db, context.refreshStorage] as const;
 }

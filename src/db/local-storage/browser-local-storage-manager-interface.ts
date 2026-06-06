@@ -1,8 +1,6 @@
 import type { DataManager } from "../data/data-manager-interface";
 
 export interface LocalStorageManager {
-  initialize(): void;
-  getManager(): DataManager;
-  getData(): unknown;
-  save(): void;
+  initialize(): DataManager;
+  save(manager: DataManager): DataManager;
 }

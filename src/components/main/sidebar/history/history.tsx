@@ -2,12 +2,12 @@ import { useStorage } from "../../../../db/storage-context";
 import RequestItem from "../request-item/request-item";
 
 const History = () => {
-  const [data] = useStorage();
+  const [db] = useStorage();
 
   return (
     <>
       <ul className="request-list">
-        {Object.values(data.history).map((request) => {
+        {db.getRequestHistory().map((request) => {
           return <RequestItem key={request.id} request={request} />;
         })}
       </ul>

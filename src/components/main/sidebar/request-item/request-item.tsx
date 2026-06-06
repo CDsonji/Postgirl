@@ -13,7 +13,7 @@ type RequestItemProps = {
 
 const RequestItem = ({ request }: RequestItemProps) => {
   const { theme } = useTheme();
-  const [,storage, refreshStorage] = useStorage();
+  const [db, refreshStorage] = useStorage();
 
   const [openCollections, setOpenCollections] = useState(false);
 
@@ -42,31 +42,28 @@ const RequestItem = ({ request }: RequestItemProps) => {
               </div>
               {openCollections && (
                 <ul className="collection-dropdown">
-                  {storage
-                    .getManager()
-                    .getAllCollections()
-                    .map((collection) => (
-                      <li
-                        key={collection.id}
-                        className="collection-dropdown-item"
-                        onClick={() => {
-                          storage.getManager().updateRequest(request.id, {
-                            collectionId: collection.id,
-                          });
-                          setOpenCollections(false);
-                          refreshStorage();
-                        }}
-                      >
-                        {collection.title}
-                      </li>
-                    ))}
+                  {db.getAllCollections().map((collection) => (
+                    <li
+                      key={collection.id}
+                      className="collection-dropdown-item"
+                      onClick={() => {
+                        db.updateRequest(request.id, {
+                          collectionId: collection.id,
+                        });
+                        setOpenCollections(false);
+                        refreshStorage();
+                      }}
+                    >
+                      {collection.title}
+                    </li>
+                  ))}
                 </ul>
               )}
             </div>
             <div
               className="request-item-button delete-button"
               onClick={() => {
-                storage.getManager().removeRequest(request.id);
+                db.removeRequest(request.id);
                 setOpenCollections(false);
                 refreshStorage();
               }}

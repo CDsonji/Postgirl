@@ -3,13 +3,13 @@ import CollectionComponent from "./collection/collection";
 import "./collections.css";
 
 const Collections = () => {
-  const [data] = useStorage();
+  const [db] = useStorage();
   console.log("📊 Collections component rendered!");
 
   return (
     <>
       <ul className="collections-list">
-        {Object.values(data.collections).map((collection) => {
+        {db.getAllCollections().map((collection) => {
           return (
             <CollectionComponent key={collection.id} collection={collection} />
           );

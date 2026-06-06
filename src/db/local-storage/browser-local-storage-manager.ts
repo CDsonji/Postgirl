@@ -133,7 +133,9 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     return this.storageKey;
   }
 
-  initialize(): void {
+  initialize(): DataManager {
+    let manager: DataManager;
+
     const rawData =
       typeof localStorage !== "undefined"
         ? localStorage.getItem(this.storageKey) ?? sample
@@ -143,39 +145,21 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
       const parsedData = JSON.parse(rawData) as Partial<Data>;
       const normalized = normalizeData(parsedData);
 
-      this.manager = new Database(normalized);
+      manager = new Database(normalized);
     } catch (error) {
       console.error("Failed to parse storage data:", error);
-      this.manager = new Database();
+      manager = new Database();
     }
+
+    return manager;
   }
 
-  getManager(): DataManager {
-    if (!this.manager) {
-      this.initialize();
-    }
-
-    if (!this.manager) {
-      throw new Error("BrowserLocalStorageManager failed to initialize");
-    }
-
-    return this.manager;
-  }
-
-  getData(): Data {
-  // The spread operator {...} creates a NEW object container
-  // This ensures that (oldData === newData) becomes FALSE
-  return {
-    ...this.getManager().getData()
-  };
-}
-
-  save(): void {
-    if (typeof localStorage === "undefined") return;
-
-    localStorage.setItem(
-      this.storageKey,
-      JSON.stringify(this.getManager().getData())
-    );
+  save(manager: DataManager): DataManager {
+    // if (typeof localStorage === "undefined") return;
+    const data = manager.getData();
+    localStorage.setItem(this.storageKey, JSON.stringify(manager.getData()));
+    return new Database({
+      ...data,
+    });
   }
 }

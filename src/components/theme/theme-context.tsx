@@ -17,23 +17,20 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export function ThemeProvider({ children }: PropsWithChildren) {
-  const [data,storage, refreshStorage] = useStorage();
+  const [db, refreshStorage] = useStorage();
 
-  const theme = data.theme;
+  const theme = db.getData().theme;
 
   const toggleTheme = useCallback(() => {
-    storage.getManager().toggleTheme();
+    db.toggleTheme();
     refreshStorage();
-  }, [storage, refreshStorage]);
+  }, [db, refreshStorage]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
-  const value = useMemo(
-    () => ({ theme, toggleTheme }),
-    [theme, toggleTheme]
-  );
+  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme]);
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

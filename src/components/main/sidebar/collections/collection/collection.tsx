@@ -13,9 +13,9 @@ type CollectionProps = {
 
 const CollectionComponent = ({ collection }: CollectionProps) => {
   const { theme } = useTheme();
-  const [,storage, refeshStorage] = useStorage();
+  const [db, refeshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
-  console.log(collection)
+  console.log(collection);
 
   // console.log("📊 Collection componen rendered!");
 
@@ -26,9 +26,7 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
           <div
             className="icon-button folder-button"
             onClick={() => {
-              storage
-                .getManager()
-                .updateCollection(collection.id, { isOpen: !isCollectionOpen });
+              db.updateCollection(collection.id, { isOpen: !isCollectionOpen });
               refeshStorage();
             }}
           >
@@ -44,12 +42,10 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
             className="collection-title"
             contentEditable
             onInput={(event) => {
-              storage
-                .getManager()
-                .renameCollection(
-                  collection.id,
-                  event.currentTarget.textContent ?? ""
-                );
+              db.renameCollection(
+                collection.id,
+                event.currentTarget.textContent ?? ""
+              );
               refeshStorage();
             }}
           >
@@ -58,12 +54,9 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
         </div>
         {isCollectionOpen && (
           <ul className="request-list">
-            {storage
-              .getManager()
-              .getRequestsFromCollectionById(collection.id)
-              .map((request) => {
-                return <RequestItem key={request.id} request={request} />;
-              })}
+            {db.getRequestsFromCollectionById(collection.id).map((request) => {
+              return <RequestItem key={request.id} request={request} />;
+            })}
           </ul>
         )}
       </li>
