@@ -1,7 +1,8 @@
-.main {
+.aside-main {
     display: flex;
     flex-direction: row;
 }
+
 
 @media only screen and (max-width: 1237px) {
   .main {

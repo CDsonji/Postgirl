@@ -39,6 +39,8 @@ export interface Data {
   requests: Record<string, HttpRequest>;
   collections: Record<string, Collection>;
   history: Record<string, HttpRequest>;
+  tabs: Record<string, HttpRequest>;
+  activeTab: HttpRequest | null;
   theme: Theme;
 }
 
@@ -71,6 +73,10 @@ export interface DataManager {
   ): void;
   renameCollection(collectionId: string, title: string): void;
   removeCollection(id: string): Collection;
+
+  addTab(request: HttpRequest): void;
+  updateCurrentTab(request: HttpRequest): void
+  removeTab(requestId: string): HttpRequest;
 
   clearRequests(): void;
   clearCollections(): void;

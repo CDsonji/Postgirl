@@ -1,16 +1,15 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import Header from "./components/header/header";
 import Settings from "./components/settings/settings";
-import Sidebar from "./components/main/sidebar/sidebar";
+import Sidebar from "./components/sidebar/sidebar";
 import { useMediaQuery } from "./utils/media-query";
-import { useStorage } from "./db/storage-context";
+import Main from "./components/main/main";
+import "./App.css"
 
 function App() {
   const [settingsIsOpen, setSettingsOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 1237px)");
   const [asideIsOpen, setAsideOpen] = useState(false);
-  console.log("📊 App component rendered!");
-  useStorage();
 
   return (
     <>
@@ -26,7 +25,6 @@ function App() {
             : undefined
         }
       />
-
       {settingsIsOpen && (
         <Settings
           exitButtonAction={() => {
@@ -34,9 +32,10 @@ function App() {
           }}
         />
       )}
-      <main className="main">
+      <div className="aside-main">
         {(!isSmallScreen || asideIsOpen) && <Sidebar />}
-      </main>
+        <Main/>
+      </div>
     </>
   );
 }

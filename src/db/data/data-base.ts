@@ -14,6 +14,8 @@ export class Database implements DataManager {
       requests: {},
       collections: {},
       history: {},
+      tabs: {},
+      activeTab: null,
       theme: Theme.DARK,
     }
   ) {
@@ -21,20 +23,46 @@ export class Database implements DataManager {
       requests: { ...data.requests },
       collections: { ...data.collections },
       history: { ...data.history },
+      tabs: { ...data.tabs },
+      activeTab: data.activeTab ? { ...data.activeTab } : null,
       theme: data.theme ?? Theme.DARK,
     };
   }
-
-  // -------------------------
-  // helpers
-  // -------------------------
-  private cloneData(overrides: Partial<Data> = {}): void {
+  addTab(request: HttpRequest): void {
     this.data = {
-      requests: overrides.requests ?? this.data.requests,
-      collections: overrides.collections ?? this.data.collections,
-      history: overrides.history ?? this.data.history,
-      theme: overrides.theme ?? this.data.theme,
+      ...this.data,
+      tabs: {
+        ...this.data.tabs,
+        [request.id]: this.cloneRequest(request),
+      },
     };
+  }
+  updateCurrentTab(request: HttpRequest): void {
+    this.data = {
+      ...this.data,
+      activeTab: request
+        ? {
+            ...request,
+          }
+        : null,
+    };
+  }
+  removeTab(requestId: string): HttpRequest {
+    const request = this.data.history[requestId];
+
+    if (!request) {
+      throw new Error("No request found");
+    }
+
+    const newTabs = { ...this.data.tabs };
+    delete newTabs[requestId];
+
+    this.data = {
+      ...this.data,
+      tabs: newTabs,
+    };
+
+    return request;
   }
 
   private cloneRequest(request: HttpRequest): HttpRequest {
@@ -58,6 +86,8 @@ export class Database implements DataManager {
       requests: { ...this.data.requests },
       collections: { ...this.data.collections },
       history: { ...this.data.history },
+      tabs: { ...this.data.tabs },
+      activeTab: this.data.activeTab ? { ...this.data.activeTab } : null,
       theme: this.data.theme,
     };
   }
@@ -216,8 +246,8 @@ export class Database implements DataManager {
       body: updates.body
         ? { ...updates.body }
         : updates.body === undefined
-          ? existing.body
-          : undefined,
+        ? existing.body
+        : undefined,
     };
 
     this.data = {
@@ -252,9 +282,7 @@ export class Database implements DataManager {
     }
 
     if (this.hasCollection(collection.id)) {
-      throw new Error(
-        `Collection with id "${collection.id}" already exists`
-      );
+      throw new Error(`Collection with id "${collection.id}" already exists`);
     }
 
     this.data = {
@@ -349,6 +377,8 @@ export class Database implements DataManager {
       requests: {},
       collections: {},
       history: {},
+      tabs: {},
+      activeTab: null,
       theme: this.data.theme,
     };
   }

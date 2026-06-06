@@ -1,4 +1,5 @@
 import {
+  Method,
   Theme,
   type Collection,
   type Data,
@@ -98,6 +99,7 @@ function normalizeData(parsed: Partial<Data>): Data {
   const requests: Record<string, HttpRequest> = {};
   const collections: Record<string, Collection> = {};
   const history: Record<string, HttpRequest> = {};
+  const tabs: Record<string, HttpRequest> = {};
 
   for (const [id, rawRequest] of Object.entries(parsed.requests ?? {})) {
     requests[id] = normalizeHttpRequest(rawRequest, id);
@@ -113,17 +115,22 @@ function normalizeData(parsed: Partial<Data>): Data {
     history[timestamp] = normalizeHttpRequest(rawHistoryRequest, timestamp);
   }
 
+  for (const [id, rawRequest] of Object.entries(parsed.tabs ?? {})) {
+    tabs[id] = normalizeHttpRequest(rawRequest, id);
+  }
+
   return {
     requests,
     collections,
     history,
+    tabs,
+    activeTab: parsed.activeTab ?? null,
     theme: parsed.theme ?? Theme.DARK,
   };
 }
 
 export class BrowserLocalStorageManager implements LocalStorageManager {
   private readonly storageKey: string;
-  private manager: DataManager | null = null;
 
   constructor(storageKey: string = "postgirl_database") {
     this.storageKey = storageKey;

@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { BrowserLocalStorageManager } from "./local-storage/browser-local-storage-manager";
-import type { Data, DataManager } from "./data/data-manager-interface";
+import type { DataManager } from "./data/data-manager-interface";
 
 type StorageContextType = {
   db: DataManager;
@@ -28,7 +28,6 @@ export function StorageProvider({ children }: { children: ReactNode }) {
 
   const refreshStorage = () => {
     const manager = storageRef.current!.save(db);
-    // console.log(storageRef.current!.getData().collections);
     setDb(manager);
   };
 

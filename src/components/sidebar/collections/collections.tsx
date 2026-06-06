@@ -1,4 +1,4 @@
-import { useStorage } from "../../../../db/storage-context";
+import { useStorage } from "../../../db/storage-context";
 import CollectionComponent from "./collection/collection";
 import "./collections.css";
 
@@ -8,7 +8,7 @@ const Collections = () => {
 
   return (
     <>
-      <ul className="collections-list">
+      <ul className="collections-list collections-list">
         {db.getAllCollections().map((collection) => {
           return (
             <CollectionComponent key={collection.id} collection={collection} />

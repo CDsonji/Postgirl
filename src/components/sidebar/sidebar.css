@@ -1,7 +1,7 @@
 aside {
   /* change the width */
-  width: 26vw;
-  height: 100vh;
+  width: 23vw;
+  height: 92vh;
   border: 0.2rem solid var(--component-border);
   background-color: var(--page-secondary-background);
   padding: 0rem;
@@ -25,7 +25,7 @@ aside {
   background: none;
   border: none;
   color: var(--text-color);
-  padding: 0.5rem;
+  padding: 1rem;
 }
 
 .sidebar-view-button:not(.sidebar-active-view):hover {
@@ -37,5 +37,5 @@ aside {
 }
 
 .view-conatainer {
-    overflow: auto;
+    /* overflow: auto; */
 }

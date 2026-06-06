@@ -13,12 +13,12 @@
   --request-list-item-hover: #afafaf;
   --icon-hover: rgba(0, 0, 0, 0.249);
   --patch: #623497;
-  --get: #007F31;
-  --post: #B98D27;
-  --put: #0355B9;
-  --delete: #94261C;
+  --get: #007f31;
+  --post: #b98d27;
+  --put: #0355b9;
+  --delete: #94261c;
   --head: #269250;
-  --options: #A61468;
+  --options: #a61468;
 }
 
 :root[data-theme="Dark-Mode"] {
@@ -51,6 +51,7 @@ html {
 body {
   background: var(--page-primary-background);
   color: var(--text-color);
+  height: 100%;
 }
 
 .icon-button {

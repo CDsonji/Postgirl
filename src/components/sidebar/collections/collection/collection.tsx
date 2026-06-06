@@ -1,9 +1,9 @@
 import {
   Theme,
   type Collection,
-} from "../../../../../db/data/data-manager-interface";
-import { useTheme } from "../../../../theme/theme-context";
-import { useStorage } from "../../../../../db/storage-context";
+} from "../../../../db/data/data-manager-interface";
+import { useTheme } from "../../../theme/theme-context";
+import { useStorage } from "../../../../db/storage-context";
 import RequestItem from "../../request-item/request-item";
 import "./collection.css";
 
@@ -15,9 +15,6 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
   const { theme } = useTheme();
   const [db, refeshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
-  console.log(collection);
-
-  // console.log("📊 Collection componen rendered!");
 
   return (
     <>

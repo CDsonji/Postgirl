@@ -2,9 +2,9 @@ import { useState } from "react";
 import {
   Theme,
   type HttpRequest,
-} from "../../../../db/data/data-manager-interface";
-import { useTheme } from "../../../theme/theme-context";
-import { useStorage } from "../../../../db/storage-context";
+} from "../../../db/data/data-manager-interface";
+import { useTheme } from "../../theme/theme-context";
+import { useStorage } from "../../../db/storage-context";
 import "./request-item.css";
 
 type RequestItemProps = {

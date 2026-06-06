@@ -1,4 +1,4 @@
-import { useStorage } from "../../../../db/storage-context";
+import { useStorage } from "../../../db/storage-context";
 import RequestItem from "../request-item/request-item";
 
 const History = () => {
@@ -6,7 +6,7 @@ const History = () => {
 
   return (
     <>
-      <ul className="request-list">
+      <ul className="request-list history-list">
         {db.getRequestHistory().map((request) => {
           return <RequestItem key={request.id} request={request} />;
         })}
