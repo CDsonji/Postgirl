@@ -2,6 +2,27 @@
     list-style-type: none;
     padding-left: 0rem;
     margin-bottom: 1rem;
-    /* max-height: 80vh;
-    overflow-y: auto; */
+    margin-top: 0rem;
+    height: 77vh;
+    overflow-y: auto;
+}
+
+.add-collection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-collection-button {
+    text-align: center;
+    text-justify: center;
+    padding: 1rem 1.5rem;
+    border: 0.2rem solid var(--component-border);
+    border-radius: 0.6rem;
+    background-color: var(--page-primary-background);
+    color: var(--text-color);
+}
+
+.add-collection-button:hover {
+    background-color: var(--icon-hover);
 }

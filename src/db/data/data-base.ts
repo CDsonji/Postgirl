@@ -197,7 +197,7 @@ export class Database implements DataManager {
   // -------------------------
   // requests
   // -------------------------
-  addRequest(request: HttpRequest): void {
+  addRequest(request: HttpRequest): HttpRequest {
     if (!request.id.trim()) {
       throw new Error("Request id cannot be empty");
     }
@@ -212,13 +212,17 @@ export class Database implements DataManager {
       );
     }
 
+    const newRequest = this.cloneRequest(request);
+
     this.data = {
       ...this.data,
       requests: {
         ...this.data.requests,
-        [request.id]: this.cloneRequest(request),
+        [request.id]: newRequest,
       },
     };
+
+    return newRequest;
   }
 
   updateRequest(requestId: string, updates: Partial<HttpRequest>): void {

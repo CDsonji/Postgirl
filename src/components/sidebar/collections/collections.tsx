@@ -3,7 +3,7 @@ import CollectionComponent from "./collection/collection";
 import "./collections.css";
 
 const Collections = () => {
-  const [db] = useStorage();
+  const [db, refreshStorage] = useStorage();
   console.log("📊 Collections component rendered!");
 
   return (
@@ -15,6 +15,21 @@ const Collections = () => {
           );
         })}
       </ul>
+      <div className="add-collection">
+        <button
+          className="add-collection-button"
+          onClick={() => {
+            db.addCollection({
+              id: crypto.randomUUID(),
+              title: "Untitled Collection",
+              isOpen: false,
+            });
+            refreshStorage();
+          }}
+        >
+          Add Collection
+        </button>
+      </div>
     </>
   );
 };

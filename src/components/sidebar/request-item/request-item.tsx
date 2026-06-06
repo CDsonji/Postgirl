@@ -25,16 +25,16 @@ const RequestItem = ({ request }: RequestItemProps) => {
             <span className={`${request.method} method`}>{request.method}</span>
           </div>
           <div className="request-item-url">{request.url}</div>
-          <div className="request-item-buttons">
+          <div className="request-item-buttons item-buttons">
             <div
               className="request-item-button add-button-wrapper"
               onMouseEnter={() => setOpenCollections(true)}
               onMouseLeave={() => setOpenCollections(false)}
             >
-              <div className="add-button" title="Add To Collection">
+              <div className="add-collecion-button item-button" title="Add To Collection">
                 <img
-                  className="request-item-button-icon"
-                  src={`./../../../../src/assets/add-${
+                  className="request-item-button-icon item-button-icon"
+                  src={`./../../../../src/assets/add-collection-${
                     theme === Theme.LIGHT ? "light" : "dark"
                   }.svg`}
                   alt="add-logo"
@@ -61,7 +61,7 @@ const RequestItem = ({ request }: RequestItemProps) => {
               )}
             </div>
             <div
-              className="request-item-button delete-button"
+              className="request-item-button delete-button item-button"
               onClick={() => {
                 db.removeRequest(request.id);
                 setOpenCollections(false);
@@ -69,7 +69,7 @@ const RequestItem = ({ request }: RequestItemProps) => {
               }}
             >
               <img
-                className="request-item-button-icon"
+                className="request-item-button-icon item-button-icon"
                 src={`./../../../../src/assets/delete-${
                   theme === Theme.LIGHT ? "light" : "dark"
                 }.svg`}

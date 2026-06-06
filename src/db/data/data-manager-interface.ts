@@ -62,7 +62,7 @@ export interface DataManager {
   hasRequest(id: string): boolean;
   hasCollection(id: string): boolean;
 
-  addRequest(request: HttpRequest): void;
+  addRequest(request: HttpRequest): HttpRequest;
   updateRequest(requestId: string, updates: Partial<HttpRequest>): void;
   removeRequest(id: string): HttpRequest;
 

@@ -1,4 +1,5 @@
 import {
+  Method,
   Theme,
   type Collection,
 } from "../../../../db/data/data-manager-interface";
@@ -13,18 +14,18 @@ type CollectionProps = {
 
 const CollectionComponent = ({ collection }: CollectionProps) => {
   const { theme } = useTheme();
-  const [db, refeshStorage] = useStorage();
+  const [db, refreshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
 
   return (
     <>
-      <li className="collection-item">
-        <div className="collection">
+      <li className="collection">
+        <div className="collection-item">
           <div
             className="icon-button folder-button"
             onClick={() => {
               db.updateCollection(collection.id, { isOpen: !isCollectionOpen });
-              refeshStorage();
+              refreshStorage();
             }}
           >
             <img
@@ -38,16 +39,58 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
           <h3
             className="collection-title"
             contentEditable
-            onInput={(event) => {
+            onBlur={(event) => {
               db.renameCollection(
                 collection.id,
                 event.currentTarget.textContent ?? ""
               );
-              refeshStorage();
+              refreshStorage();
             }}
           >
             {collection.title}
           </h3>
+          <div className="collection-item-buttons">
+            <div
+              className="add-request-button collection-item-button"
+              title="Add Request"
+              onClick={() => {
+                const request = db.addRequest({
+                  id: crypto.randomUUID(),
+                  collectionId: collection.id,
+                  url: "http://localhost:8000",
+                  method: Method.GET,
+                  params: {},
+                  headers: {},
+                });
+                db.addTab(request);
+                db.updateCurrentTab(request);
+                refreshStorage();
+              }}
+            >
+              <img
+                className="collection-item-button-icon"
+                src={`./../../../../../src/assets/add-request-${
+                  theme === Theme.LIGHT ? "light" : "dark"
+                }.svg`}
+                alt="add-logo"
+              />
+            </div>
+            <div
+              className="collection-item-button delete-button"
+              onClick={() => {
+                db.removeCollection(collection.id);
+                refreshStorage();
+              }}
+            >
+              <img
+                className="collection-item-button-icon"
+                src={`./../../../../../src/assets/delete-${
+                  theme === Theme.LIGHT ? "light" : "dark"
+                }.svg`}
+                alt="add-logo"
+              />
+            </div>
+          </div>
         </div>
         {isCollectionOpen && (
           <ul className="request-list">

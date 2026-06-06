@@ -15,6 +15,7 @@ aside {
   border-radius: 1rem;
 }
 
+
 .sidebar-view-buttons {
   display: flex;
   flex-direction: row;
@@ -37,5 +38,5 @@ aside {
 }
 
 .view-conatainer {
-    /* overflow: auto; */
+  /* overflow: auto; */
 }
