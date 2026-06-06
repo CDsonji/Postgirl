@@ -9,9 +9,10 @@ import "./request-item.css";
 
 type RequestItemProps = {
   request: HttpRequest;
+  isActive: boolean;
 };
 
-const RequestItem = ({ request }: RequestItemProps) => {
+const RequestItem = ({ request, isActive }: RequestItemProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
 
@@ -20,7 +21,7 @@ const RequestItem = ({ request }: RequestItemProps) => {
   return (
     <>
       <li className="request-item-container">
-        <div className="request-item">
+        <div className={`request-item ${isActive ? "request-is-view" : ""}`}>
           <h4 className="request-item-method">
             <span className={`${request.method} method`}>{request.method}</span>
           </h4>
@@ -31,7 +32,10 @@ const RequestItem = ({ request }: RequestItemProps) => {
               onMouseEnter={() => setOpenCollections(true)}
               onMouseLeave={() => setOpenCollections(false)}
             >
-              <div className="add-collecion-button item-button" title="Add To Collection">
+              <div
+                className="add-collecion-button item-button"
+                title="Add To Collection"
+              >
                 <img
                   className="request-item-button-icon item-button-icon"
                   src={`./../../../../src/assets/add-collection-${

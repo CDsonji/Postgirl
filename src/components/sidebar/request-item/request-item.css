@@ -12,7 +12,8 @@
   padding-bottom: 0.6rem;
 }
 
-.request-item:hover {
+.request-item:hover,
+.request-item.request-is-view {
   background-color: var(--text-hover);
   cursor: pointer;
 }
@@ -24,9 +25,9 @@
 }
 
 .request-item-url {
-    overflow-x: hidden;
-    padding-right: 0.2rem;
-    margin: 0rem;
+  overflow-x: hidden;
+  padding-right: 0.2rem;
+  margin: 0rem;
 }
 
 /* .request-item-url,.request-item-method {
@@ -87,5 +88,5 @@
 }
 
 .collection-dropdown-item:hover {
-  background-color: var(--icon-hover );
+  background-color: var(--icon-hover);
 }

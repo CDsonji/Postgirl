@@ -8,7 +8,9 @@ const Requests = () => {
     <>
       <ul className="request-list">
         {db.getAllRequests().map((request) => {
-          return <RequestItem key={request.id} request={request} />;
+          const activeId = db.getData().activeTab?.id;
+          return <RequestItem key={request.id} request={request} isActive={activeId===request.id}
+           />;
         })}
       </ul>
     </>

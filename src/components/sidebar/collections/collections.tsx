@@ -10,8 +10,13 @@ const Collections = () => {
     <>
       <ul className="collections-list collections-list">
         {db.getAllCollections().map((collection) => {
+          const activeRequest = db.getData().activeTab;
           return (
-            <CollectionComponent key={collection.id} collection={collection} />
+            <CollectionComponent
+              key={collection.id}
+              collection={collection}
+              isActive={activeRequest?.collectionId === collection.id}
+            />
           );
         })}
       </ul>

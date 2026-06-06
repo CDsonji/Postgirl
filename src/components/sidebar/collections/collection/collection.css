@@ -6,7 +6,7 @@
     position: relative;
 }
 
-.collection-item:hover {
+.collection-item:hover, .collection-item.request-in-is-view {
   background-color: var(--text-hover);
   cursor: pointer;
 }

@@ -10,9 +10,10 @@ import "./collection.css";
 
 type CollectionProps = {
   collection: Collection;
+  isActive: boolean
 };
 
-const CollectionComponent = ({ collection }: CollectionProps) => {
+const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
@@ -20,7 +21,7 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
   return (
     <>
       <li className="collection">
-        <div className="collection-item">
+        <div className={`collection-item ${isActive? "request-in-is-view":""}`}>
           <div
             className="icon-button folder-button"
             onClick={() => {
@@ -95,7 +96,8 @@ const CollectionComponent = ({ collection }: CollectionProps) => {
         {isCollectionOpen && (
           <ul className="request-list">
             {db.getRequestsFromCollectionById(collection.id).map((request) => {
-              return <RequestItem key={request.id} request={request} />;
+              const activeId = db.getData().activeTab?.id;
+              return <RequestItem key={request.id} request={request} isActive={activeId===request.id} />;
             })}
           </ul>
         )}
