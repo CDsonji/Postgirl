@@ -1,4 +1,5 @@
 import "./main.css";
+import RequestForm from "./request-form/request-form";
 import TabsBar from "./tabs-bar/tabs-bar";
 
 const Main = () => {
@@ -6,6 +7,7 @@ const Main = () => {
     <>
       <main className="main">
         <TabsBar />
+        <RequestForm/>
       </main>
     </>
   );

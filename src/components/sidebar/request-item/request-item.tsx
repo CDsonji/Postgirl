@@ -73,7 +73,8 @@ const RequestItem = ({ request, isActive }: RequestItemProps) => {
             </div>
             <div
               className="request-item-button delete-button item-button"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 db.removeRequest(request.id);
                 setOpenCollections(false);
                 refreshStorage();

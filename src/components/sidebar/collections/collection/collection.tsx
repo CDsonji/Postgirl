@@ -10,10 +10,10 @@ import "./collection.css";
 
 type CollectionProps = {
   collection: Collection;
-  isActive: boolean
+  isActive: boolean;
 };
 
-const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
+const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
@@ -22,7 +22,9 @@ const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
   return (
     <>
       <li className="collection">
-        <div className={`collection-item ${isActive? "request-in-is-view":""}`}>
+        <div
+          className={`collection-item ${isActive ? "request-in-is-view" : ""}`}
+        >
           <div
             className="icon-button folder-button"
             onClick={() => {
@@ -55,7 +57,8 @@ const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
             <div
               className="add-request-button collection-item-button"
               title="Add Request"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 const request = db.addRequest({
                   id: crypto.randomUUID(),
                   collectionId: collection.id,
@@ -97,7 +100,13 @@ const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
         {isCollectionOpen && (
           <ul className="request-list">
             {db.getRequestsFromCollectionById(collection.id).map((request) => {
-              return <RequestItem key={request.id} request={request} isActive={activeId===request.id} />;
+              return (
+                <RequestItem
+                  key={request.id}
+                  request={request}
+                  isActive={activeId === request.id}
+                />
+              );
             })}
           </ul>
         )}

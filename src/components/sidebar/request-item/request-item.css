@@ -36,12 +36,19 @@
 
 .request-item-buttons {
   display: none;
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   top: 50%;
   right: 0.7rem;
   transform: translateY(-50%);
   background-color: var(--text-hover);
+}
+
+@media only screen and (max-width: 1237px) {
+  .request-item-buttons {
+    display: flex;
+    background-color: var(--text-hover);
+  }
 }
 
 .request-item:hover .request-item-buttons {
@@ -66,7 +73,7 @@
 
 .collection-dropdown {
   list-style-type: none;
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   right: 0;
   bottom: 100%;

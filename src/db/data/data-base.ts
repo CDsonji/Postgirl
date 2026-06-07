@@ -310,6 +310,10 @@ export class Database implements DataManager {
 
   removeRequest(id: string): HttpRequest {
     const request = this.getRequestById(id);
+    const tab = this.data.tabs[id];
+    if (tab) {
+      this.removeTab(id);
+    }
 
     const newRequests = { ...this.data.requests };
     delete newRequests[id];

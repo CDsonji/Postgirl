@@ -13,7 +13,7 @@
 
 .collection-item-buttons {
   display: none;
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   top: 50%;
   right: 0.7rem;

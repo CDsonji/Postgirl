@@ -8,7 +8,6 @@ const TabsBar = () => {
   const [db, refreshStorage] = useStorage();
   const { theme } = useTheme();
   const activeId = db.getData().activeTab?.requestId;
-  `active tab: ${activeId}`;
 
   return (
     <div className="tabs-container">

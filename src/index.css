@@ -11,7 +11,7 @@
   --component-border: #d6d6d6;
   --text-color: black;
   --text-hover: #d7d7d7;
-  --icon-hover: #C0C0C0;
+  --icon-hover: #c0c0c0;
   --patch: #623497;
   --get: #007f31;
   --post: #b98d27;
@@ -19,6 +19,9 @@
   --delete: #94261c;
   --head: #269250;
   --options: #a61468;
+  --connect: #048290;
+  --trace: #ff4a4a;
+  --form-input: #74AEF6;
 }
 
 :root[data-theme="Dark-Mode"] {
@@ -35,6 +38,9 @@
   --delete: #f79a8e;
   --head: #67d293;
   --options: #d9579f;
+  --connect: #00c3d8;
+  --trace: #fe8585;
+  --form-input: #097BED;
 }
 
 * {
@@ -102,4 +108,12 @@ span.HEAD {
 
 span.OPTIONS {
   color: var(--options);
+}
+
+span.CONNECT {
+  color: var(--connect);
+}
+
+span.TRACE {
+  color: var(--trace);
 }

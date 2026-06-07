@@ -1,0 +1,33 @@
+.requet-form-container {
+  margin: 1.5rem 3rem;
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.url-container {
+  height: 3.52rem;
+  border: 0.2rem solid var(--component-border);
+  display: flex;
+  width: 83%;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+
+.url-input {
+  padding: 0.7rem;
+  margin-left: 0.34rem;
+  border: none;
+  background-color: var(--page-secondary-background);
+  color: var(--text-color);
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  flex: 1;
+}
+
+.url-input:focus {
+  outline: 0.4rem solid var(--form-input);
+  border-color: transparent;
+}

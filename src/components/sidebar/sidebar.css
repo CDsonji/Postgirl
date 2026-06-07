@@ -7,12 +7,23 @@ aside {
   padding: 0rem;
 }
 
+@media only screen and (max-width: 1237px) {
+  aside {
+    background-color: var(--page-primary-background);
+    width: 27rem;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+  }
+}
+
 .request-list {
   list-style-type: none;
   padding: 0.5rem 0rem;
   margin: 1rem;
   border: 0.2rem solid var(--component-border);
-  border-radius: 1rem;
+  border-radius: 0.7rem;
 }
 
 
