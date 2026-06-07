@@ -1,26 +1,39 @@
 .requet-form-container {
-  margin: 1.5rem 3rem;
+  margin: 2rem 3rem;
+}
+
+.form-header,
+.form-header-buttons,
+.request-form,
+.url-container,
+.save-button-container {
+  display: flex;
+}
+
+.form-header {
+  height: 3.5rem;
+  flex-wrap: wrap;
 }
 
 .request-form {
-  display: flex;
   flex-direction: column;
 }
 
 .url-container {
-  height: 3.52rem;
+  height: 100%;
   border: 0.2rem solid var(--component-border);
-  display: flex;
-  width: 83%;
+  width: 82%;
   align-items: center;
   border-radius: 0.5rem;
 }
 
 .url-input {
-  padding: 0.7rem;
+  box-sizing: border-box;
+  padding: 1rem;
+  height: 100%;
   margin-left: 0.34rem;
   border: none;
-  background-color: var(--page-secondary-background);
+  background-color: var(--page-primary-background);
   color: var(--text-color);
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
@@ -28,6 +41,49 @@
 }
 
 .url-input:focus {
-  outline: 0.4rem solid var(--form-input);
+  outline: 0.35rem solid var(--form-input);
   border-color: transparent;
+}
+
+.form-header-buttons {
+  margin-left: 1rem;
+  align-items: center;
+}
+
+.form-header-button {
+  height: 95%;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;  
+  width: 7rem;
+  cursor: pointer;
+}
+
+.send-button {
+  border: none;
+  font-weight: bold;
+  font-size: 1.45rem;
+  background-color: var(--form-input);
+  color: white;
+}
+
+.save-button {
+  /* border: 0.2rem solid var(--component-border); */
+  font-size: 1.6rem;
+  background-color: var(--page-secondary-background);
+  color: var(--text-color);
+  margin-left: 1.2rem;
+}
+
+.save-button:hover {
+    background-color: var(--icon-hover);
+}
+
+.save-button-container {
+  align-items: center;
+}
+
+.save-logo {
+    margin-right: 0.8rem;
+    height: 2.3rem;
 }

@@ -198,10 +198,10 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
   initialize(): DataManager {
     let manager: DataManager;
 
-    const rawData = sample;
-    // typeof localStorage !== "undefined"
-    //   ? localStorage.getItem(this.storageKey) ?? sample
-    //   : sample;
+    const rawData = 
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem(this.storageKey) ?? sample
+      : sample;
 
     try {
       const parsedData = JSON.parse(rawData) as Partial<Data>;
