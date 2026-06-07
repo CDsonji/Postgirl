@@ -39,9 +39,14 @@ export interface Data {
   requests: Record<string, HttpRequest>;
   collections: Record<string, Collection>;
   history: Record<string, HttpRequest>;
-  tabs: Record<string, HttpRequest>;
-  activeTab: HttpRequest | null;
+  tabs: Record<string, Tab>;
+  activeTab: Tab | null;
   theme: Theme;
+}
+
+export interface Tab {
+  createdAt: string;
+  requestId: string;
 }
 
 export interface DataManager {
@@ -74,10 +79,10 @@ export interface DataManager {
   renameCollection(collectionId: string, title: string): void;
   removeCollection(id: string): Collection;
 
-  getRequestTabs(): HttpRequest[]
-  addTab(request: HttpRequest): void;
-  updateCurrentTab(request: HttpRequest): void
-  removeTab(requestId: string): HttpRequest;
+  getTabs(): Tab[];
+  addTab(requestId: string): void;
+  updateCurrentTab(requestId: string): void;
+  removeTab(requestId: string): Tab;
 
   clearRequests(): void;
   clearCollections(): void;

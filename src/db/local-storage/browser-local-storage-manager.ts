@@ -1,10 +1,10 @@
 import {
-  Method,
   Theme,
   type Collection,
   type Data,
   type DataManager,
   type HttpRequest,
+  type Tab,
 } from "../data/data-manager-interface";
 import { Database } from "../data/data-base";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
@@ -100,78 +100,35 @@ const sample = `{
   },
   "tabs": {
     "req-1": {
-      "id": "req-1",
-      "collectionId": "col-1",
-      "url": "https://api.example.com/users",
-      "method": "GET",
-      "params": {
-        "page": 1,
-        "limit": 10
-      },
-      "headers": {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer token123"
-      },
-      "body": {
-        "name": "Alice",
-        "age": 25
-      }
+      "createdAt": "1",
+      "requestId": "req-1"
     },
     "req-2": {
-      "id": "req-2",
-      "collectionId": "col-1",
-      "url": "https://api.example.com/users",
-      "method": "POST",
-      "params": {},
-      "headers": {
-        "Content-Type": "application/json"
-      },
-      "body": {
-        "name": "Bob"
-      }
+      "createdAt": "2",
+      "requestId": "req-2"
     },
     "req-3": {
-      "id": "req-3",
-      "collectionId": "col-1",
-      "url": "https://api.example.com/users",
-      "method": "OPTIONS",
-      "params": {},
-      "headers": {
-        "Content-Type": "application/json"
-      },
-      "body": {
-        "name": "Bob"
-      }
+      "createdAt": "3",
+      "requestId": "req-3"
     },
     "req-4": {
-      "id": "req-4",
-      "collectionId": "col-1",
-      "url": "https://api.example.com/users",
-      "method": "HEAD",
-      "params": {},
-      "headers": {
-        "Content-Type": "application/json"
-      },
-      "body": {
-        "name": "Bob"
-      }
+      "createdAt": "4",
+      "requestId": "req-4"
     }
   },
-  "activeTab":{
-      "id": "req-2",
-      "collectionId": "col-1",
-      "url": "https://api.example.com/users",
-      "method": "POST",
-      "params": {},
-      "headers": {
-        "Content-Type": "application/json"
-      },
-      "body": {
-        "name": "Bob"
-      }
+  "activeTab": {
+      "createdAt": "2",
+      "requestId": "req-2"
     },
   "theme": "Light-Mode"
 }`;
+
+function normalizeTab(raw: any, fallbackId: string): Tab {
+  return {
+    createdAt: raw?.createdAt ?? fallbackId,
+    requestId: raw?.requestId,
+  };
+}
 
 function normalizeHttpRequest(raw: any, fallbackId: string): HttpRequest {
   return {
@@ -197,7 +154,7 @@ function normalizeData(parsed: Partial<Data>): Data {
   const requests: Record<string, HttpRequest> = {};
   const collections: Record<string, Collection> = {};
   const history: Record<string, HttpRequest> = {};
-  const tabs: Record<string, HttpRequest> = {};
+  const tabs: Record<string, Tab> = {};
 
   for (const [id, rawRequest] of Object.entries(parsed.requests ?? {})) {
     requests[id] = normalizeHttpRequest(rawRequest, id);
@@ -213,8 +170,8 @@ function normalizeData(parsed: Partial<Data>): Data {
     history[timestamp] = normalizeHttpRequest(rawHistoryRequest, timestamp);
   }
 
-  for (const [id, rawRequest] of Object.entries(parsed.tabs ?? {})) {
-    tabs[id] = normalizeHttpRequest(rawRequest, id);
+  for (const [id, rawTab] of Object.entries(parsed.tabs ?? {})) {
+    tabs[id] = normalizeTab(rawTab, id);
   }
 
   return {
@@ -242,9 +199,9 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
     let manager: DataManager;
 
     const rawData = sample;
-      // typeof localStorage !== "undefined"
-      //   ? localStorage.getItem(this.storageKey) ?? sample
-      //   : sample;
+    // typeof localStorage !== "undefined"
+    //   ? localStorage.getItem(this.storageKey) ?? sample
+    //   : sample;
 
     try {
       const parsedData = JSON.parse(rawData) as Partial<Data>;

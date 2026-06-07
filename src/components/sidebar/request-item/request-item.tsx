@@ -21,7 +21,14 @@ const RequestItem = ({ request, isActive }: RequestItemProps) => {
   return (
     <>
       <li className="request-item-container">
-        <div className={`request-item ${isActive ? "request-is-view" : ""}`}>
+        <div
+          className={`request-item ${isActive ? "request-is-view" : ""}`}
+          onClick={() => {
+            db.addTab(request.id);
+            db.updateCurrentTab(request.id);
+            refreshStorage();
+          }}
+        >
           <h4 className="request-item-method">
             <span className={`${request.method} method`}>{request.method}</span>
           </h4>

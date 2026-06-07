@@ -4,6 +4,7 @@ import {
   type Data,
   type DataManager,
   type HttpRequest,
+  type Tab,
 } from "./data-manager-interface";
 
 export class Database implements DataManager {
@@ -29,34 +30,67 @@ export class Database implements DataManager {
     };
   }
 
-  getRequestTabs(): HttpRequest[] {
-    return Object.values(this.data.tabs);
+  getTabs(): Tab[] {
+    return Object.values(this.data.tabs)
+      .sort((a, b) => Number(a.createdAt) - Number(b.createdAt))
+      .map((tab) => this.cloneTab(tab));
   }
 
-  addTab(request: HttpRequest): void {
-    this.data = {
-      ...this.data,
-      tabs: {
-        ...this.data.tabs,
-        [request.id]: this.cloneRequest(request),
-      },
-    };
-  }
-  updateCurrentTab(request: HttpRequest): void {
-    this.data = {
-      ...this.data,
-      activeTab: request
-        ? {
-            ...request,
-          }
-        : null,
-    };
-  }
-  removeTab(requestId: string): HttpRequest {
-    const request = this.data.history[requestId];
+  addTab(requestId: string): void {
+    const request = this.getRequestById(requestId);
+    const tab = this.data.tabs[requestId];
+    if (!tab) {
+      const newTab: Tab = {
+        createdAt: String(Date.now()),
+        requestId: request.id,
+      };
 
-    if (!request) {
-      throw new Error("No request found");
+      this.data = {
+        ...this.data,
+        tabs: {
+          ...this.data.tabs,
+          [request.id]: newTab,
+        },
+      };
+    }
+    this.updateCurrentTab(requestId);
+  }
+
+  updateCurrentTab(requestId: string = ""): void {
+    const tab = this.data.tabs[requestId];
+
+    this.data = {
+      ...this.data,
+      activeTab: tab ? { ...tab } : null,
+    };
+  }
+
+  removeTab(requestId: string): Tab {
+    const tab = this.data.tabs[requestId];
+
+    if (!tab) {
+      throw new Error(`No Tab with current request id ${requestId} found`);
+    }
+    const tabs = this.getTabs();
+    let index = tabs.findIndex((t) => t.requestId === requestId);
+    let current = tabs.findIndex(
+      (t) => t.requestId === this.data.activeTab?.requestId
+    );
+    // console.log(`current: ${current}`);
+    // console.log(`index: ${index} ${index===0} ${index + 1 < tabs.length}`);
+    if (current === index) {
+      if (index === 0) {
+        if (index + 1 < tabs.length) {
+          // console.log("next");
+          this.updateCurrentTab(tabs[index + 1].requestId);
+        } else {
+          // console.log("null");
+          this.updateCurrentTab();
+        }
+      } else {
+        // console.log("previous");
+        this.updateCurrentTab(tabs[index! - 1].requestId);
+      }
     }
 
     const newTabs = { ...this.data.tabs };
@@ -67,7 +101,7 @@ export class Database implements DataManager {
       tabs: newTabs,
     };
 
-    return request;
+    return tab;
   }
 
   private cloneRequest(request: HttpRequest): HttpRequest {
@@ -76,6 +110,12 @@ export class Database implements DataManager {
       params: { ...request.params },
       headers: { ...request.headers },
       body: request.body ? { ...request.body } : undefined,
+    };
+  }
+
+  private cloneTab(tab: Tab): Tab {
+    return {
+      ...tab,
     };
   }
 

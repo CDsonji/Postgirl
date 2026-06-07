@@ -1,21 +1,28 @@
 import { Link } from "react-router-dom";
-import {
-  Theme,
-  type HttpRequest,
-} from "../../../../db/data/data-manager-interface";
+import { Theme, type Tab } from "../../../../db/data/data-manager-interface";
 import "./tab.css";
 import { useTheme } from "../../../theme/theme-context";
+import { useStorage } from "../../../../db/storage-context";
 
 type TabProps = {
-  request: HttpRequest;
+  tab: Tab;
   isActive: boolean;
 };
 
-const Tab = ({ request, isActive }: TabProps) => {
+const TabComponent = ({ tab, isActive }: TabProps) => {
   const { theme } = useTheme();
+  const [db, refreshStorage] = useStorage();
+  const request = db.getRequestById(tab.requestId);
+  if (isActive) tab;
 
   return (
-    <li className={`tab ${isActive ? "active-tab" : ""}`}>
+    <li
+      className={`tab ${isActive ? "active-tab" : ""}`}
+      onClick={() => {
+        db.updateCurrentTab(tab.requestId);
+        refreshStorage();
+      }}
+    >
       {/* <Link to={`/tabs/${request.id}`} className="tab-link"> */}
       <h4 className="tab-title">
         <span className={`${request.method} method`}>{request.method}</span>{" "}
@@ -23,7 +30,12 @@ const Tab = ({ request, isActive }: TabProps) => {
       </h4>
       <div
         className="tab-button tab-exit-button"
-        onClick={() => {}}
+        title="Close Tab"
+        onClick={(e) => {
+          e.stopPropagation();
+          db.removeTab(request.id);
+          refreshStorage();
+        }}
       >
         <img
           className="tab-button-icon"
@@ -38,4 +50,4 @@ const Tab = ({ request, isActive }: TabProps) => {
   );
 };
 
-export default Tab;
+export default TabComponent;

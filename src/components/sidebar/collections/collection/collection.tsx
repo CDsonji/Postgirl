@@ -17,6 +17,7 @@ const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
+  const activeId = db.getData().activeTab?.requestId;
 
   return (
     <>
@@ -63,8 +64,8 @@ const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
                   params: {},
                   headers: {},
                 });
-                db.addTab(request);
-                db.updateCurrentTab(request);
+                db.addTab(request.id);
+                db.updateCurrentTab(request.id);
                 refreshStorage();
               }}
             >
@@ -96,7 +97,6 @@ const CollectionComponent = ({ collection,isActive }: CollectionProps) => {
         {isCollectionOpen && (
           <ul className="request-list">
             {db.getRequestsFromCollectionById(collection.id).map((request) => {
-              const activeId = db.getData().activeTab?.id;
               return <RequestItem key={request.id} request={request} isActive={activeId===request.id} />;
             })}
           </ul>

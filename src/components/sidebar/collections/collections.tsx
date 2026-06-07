@@ -1,21 +1,25 @@
+import type { Tab } from "../../../db/data/data-manager-interface";
 import { useStorage } from "../../../db/storage-context";
 import CollectionComponent from "./collection/collection";
 import "./collections.css";
 
 const Collections = () => {
   const [db, refreshStorage] = useStorage();
-  console.log("📊 Collections component rendered!");
+  const currentTab = db.getData().activeTab as Tab;
+  let collectionId: string | undefined;
+  currentTab
+    ? (collectionId = db.getRequestById(currentTab.requestId).collectionId)
+    : "";
 
   return (
     <>
       <ul className="collections-list collections-list">
         {db.getAllCollections().map((collection) => {
-          const activeRequest = db.getData().activeTab;
           return (
             <CollectionComponent
               key={collection.id}
               collection={collection}
-              isActive={activeRequest?.collectionId === collection.id}
+              isActive={currentTab ? collectionId === collection.id : false}
             />
           );
         })}
