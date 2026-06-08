@@ -24,9 +24,9 @@ export interface HttpRequest {
   collectionId?: string;
   url: string;
   method: Method;
-  params: Record<string, string | number>;
-  headers: Record<string, string | number>;
-  body?: Record<string, unknown>;
+  params: Record<string, string>;
+  headers: Record<string, string>;
+  body?: string;
 }
 
 export interface Collection {

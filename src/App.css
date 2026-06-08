@@ -5,10 +5,10 @@
 
 
 @media only screen and (max-width: 1237px) {
-  main {
+  /* main {
     display: block;
     border-left: 0.2rem solid var(--component-border);
-  }
+  } */
 
   .aside-main {
     position: relative;

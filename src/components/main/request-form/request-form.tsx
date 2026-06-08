@@ -7,20 +7,54 @@ import {
 import "./request-form.css";
 import MethodSelect from "./method-select/method-select";
 import { useTheme } from "../../theme/theme-context";
+import ParamsView from "./params-view/params-view";
+import HeadersView from "./headers-view/headers-view";
+import CodeMirror, { EditorView } from "@uiw/react-codemirror";
+
+const FormView = {
+  HEADERS: "headers",
+  PARAMS: "params",
+  BODY: "body",
+};
+
+const METHODS_WITH_BODY = ["POST", "PUT", "PATCH"];
 
 const RequestFrom = () => {
   const [db, refreshStorage] = useStorage();
   const { theme } = useTheme();
+  const [view, setView] = useState(FormView.PARAMS);
   const tab = db.getData().activeTab;
+  const tabRequest: HttpRequest | null = tab?.createdAt ? tab.request : null;
 
-  const tabRequest: HttpRequest | null = tab ? tab.request : null;
-  // console.log(tabRequest);
-  // const [form, setForm] = useState<HttpRequest | null>(request);
-  // console.log(form);
-
-  // useEffect(() => {
-  //   setForm(request);
-  // }, [tab]);
+  const Themeee = EditorView.theme({
+    "&": {
+      backgroundColor: "var(--page-secondary-background)",
+      color: "var(--text-color)",
+      fontSize: "1.3rem",
+      border: "0.2rem solid var(--component-border)",
+    },
+    ".cm-activeLine": {
+      backgroundColor:
+        theme === Theme.DARK
+          ? "rgba(255, 255, 255, 0.03)"
+          : "rgba(0, 0, 0, 0.1)",
+    },
+    ".cm-gutters": {
+      backgroundColor: "var(--page-secondary-background)",
+      color: "#858585",
+      border: "none",
+    },
+    ".cm-content": {
+      backgroundColor: "var(--page-primary-background)",
+    },
+    ".cm-activeLineGutter": {
+      backgroundColor: "transparent",
+    },
+    ".cm-cursor": {
+      borderLeftColor: "var(--text-color)",
+      borderLeftWidth: "0.2rem",
+    },
+  });
 
   return (
     <>
@@ -41,7 +75,7 @@ const RequestFrom = () => {
                 <input
                   type="text"
                   className="url-input"
-                  defaultValue={tabRequest.url}
+                  value={tabRequest.url}
                   placeholder="Enter the URL of the Request"
                   onChange={(e) => {
                     db.updateTabForm(tabRequest.id, {
@@ -54,15 +88,20 @@ const RequestFrom = () => {
               </div>
               <div className="form-header-buttons">
                 <button
+                  type="button"
                   className="send-button form-header-button"
                   onClick={() => {}}
                 >
                   Send
                 </button>
                 <button
+                  type="button"
                   className="reset-button form-header-button"
                   onClick={() => {
-                    db.updateRequest(tabRequest.id, { ...tabRequest });
+                    db.updateTabForm(
+                      tabRequest.id,
+                      db.getRequestById(tabRequest.id)
+                    );
                     refreshStorage();
                   }}
                 >
@@ -78,6 +117,7 @@ const RequestFrom = () => {
                   </div>
                 </button>
                 <button
+                  type="button"
                   className="save-button form-header-button"
                   onClick={() => {
                     db.updateRequest(tabRequest.id, { ...tabRequest });
@@ -97,8 +137,59 @@ const RequestFrom = () => {
                 </button>
               </div>
             </div>
+            <div className="form-view-buttons">
+              <button
+                type="button"
+                className={`form-view-button ${
+                  view === FormView.PARAMS && "form-active-view"
+                }`}
+                onClick={() => setView(FormView.PARAMS)}
+              >
+                Query Params
+              </button>
+              <button
+                type="button"
+                className={`form-view-button ${
+                  view === FormView.HEADERS && "form-active-view"
+                }`}
+                onClick={() => setView(FormView.HEADERS)}
+              >
+                Headers
+              </button>
+              {METHODS_WITH_BODY.includes(tabRequest.method) && (
+                <button
+                  type="button"
+                  className={`form-view-button ${
+                    view === FormView.BODY && "form-active-view"
+                  }`}
+                  onClick={() => setView(FormView.BODY)}
+                >
+                  Body
+                </button>
+              )}
+            </div>
+            <div className="form-view">
+              {view === FormView.PARAMS && <ParamsView request={tabRequest} />}
+              {view === FormView.HEADERS && (
+                <HeadersView request={tabRequest} />
+              )}
+              {view === FormView.BODY && (
+                <CodeMirror
+                  value={tabRequest.body ?? ""}
+                  height="100%"
+                  // theme="dark"
+                  extensions={[Themeee]}
+                  onChange={(value) => {
+                    db.updateTabForm(tabRequest.id, { body: value });
+                    refreshStorage();
+                  }}
+                />
+              )}
+            </div>
           </form>
-        ) : null}
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

@@ -5,5 +5,7 @@ main {
     border-right: 0.2rem solid var(--component-border);
     border-bottom: 0.2rem solid var(--component-border);
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
     background-color: var(--page-secondary-background);
 }

@@ -48,11 +48,7 @@ export class Database implements DataManager {
         ...updates,
         params: updates.params ? { ...updates.params } : existing.params,
         headers: updates.headers ? { ...updates.headers } : existing.headers,
-        body: updates.body
-          ? { ...updates.body }
-          : updates.body === undefined
-          ? existing.body
-          : undefined,
+        body: updates.body,
       },
     };
 
@@ -147,7 +143,7 @@ export class Database implements DataManager {
       ...request,
       params: { ...request.params },
       headers: { ...request.headers },
-      body: request.body ? { ...request.body } : undefined,
+      body: request.body,
     };
   }
 
@@ -320,11 +316,7 @@ export class Database implements DataManager {
       ...updates,
       params: updates.params ? { ...updates.params } : existing.params,
       headers: updates.headers ? { ...updates.headers } : existing.headers,
-      body: updates.body
-        ? { ...updates.body }
-        : updates.body === undefined
-        ? existing.body
-        : undefined,
+      body: updates.body,
     };
 
     this.data = {

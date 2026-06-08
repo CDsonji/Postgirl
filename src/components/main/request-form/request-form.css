@@ -1,5 +1,6 @@
 .requet-form-container {
   margin: 2rem 3rem;
+  flex: 1;
 }
 
 .form-header,
@@ -18,12 +19,12 @@
 
 .request-form {
   flex-direction: column;
+  height: 100%;
 }
 
 .url-container {
   height: 100%;
   border: 0.2rem solid var(--component-border);
-  /* width: 73%; */
   flex: 1;
   align-items: center;
   border-radius: 0.5rem;
@@ -33,12 +34,13 @@
   box-sizing: border-box;
   padding: 1rem;
   height: 100%;
-  margin-left: 0.34rem;
+  margin-left: 0.315rem;
   border: none;
   background-color: var(--page-primary-background);
   color: var(--text-color);
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+  border-left: 0.2rem solid var(--component-border);
   flex: 1;
 }
 
@@ -56,7 +58,7 @@
   height: 95%;
   outline: none;
   border: none;
-  border-radius: 0.5rem;  
+  border-radius: 0.5rem;
   width: 7rem;
   cursor: pointer;
 }
@@ -69,28 +71,70 @@
   color: white;
 }
 
-.save-button, .reset-button {
-  /* border: 0.2rem solid var(--component-border); */
+.save-button,
+.reset-button {
   font-size: 1.6rem;
   background-color: var(--page-secondary-background);
   color: var(--text-color);
   margin-left: 1.2rem;
 }
 
-.save-button:hover, .reset-button:hover {
-    background-color: var(--icon-hover);
+.save-button:hover,
+.reset-button:hover {
+  background-color: var(--icon-hover);
 }
 
-.save-button-container, .reset-button-container {
+.save-button-container,
+.reset-button-container {
   align-items: center;
 }
 
 .save-logo {
-    margin-right: 0.8rem;
-    height: 2.3rem;
+  margin-right: 0.8rem;
+  height: 2.3rem;
 }
 
 .reset-logo {
   height: 2rem;
   margin-right: 0.8rem;
+}
+
+.form-view-buttons {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  height: 4rem;
+}
+
+.form-view-button {
+  padding: 0rem 2rem;
+  font-size: 1.2rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+}
+
+.form-view-button:not(.form-active-view):hover {
+  background-color: var(--text-hover);
+}
+
+.form-view-button.form-active-view {
+  border-bottom: 0.3rem solid var(--primary-color);
+  border-top-color: var(--page-secondary-background);
+}
+
+.form-view {
+  margin-top: 1rem;
+  height: 33.5%;
+}
+
+.form-view> * {
+  height: 100%;
+}
+
+.form-view-item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }

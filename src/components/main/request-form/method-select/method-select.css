@@ -7,19 +7,12 @@
   width: 10.5rem;
   height: 100%;
   padding: 0.6rem 1.2rem;
-  /* border: 0.2rem solid var(--component-border); */
   background: var(--page-secondary-background);
   cursor: pointer;
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
   border: none;
-  border-right: 0.2rem solid var(--component-border);
 }
-
-/* .method-btn:focus {
-    outline: 0.4rem solid var(--form-input);
-    border-color: var(--form-input);
-} */
 
 .method-menu {
   position: absolute;
