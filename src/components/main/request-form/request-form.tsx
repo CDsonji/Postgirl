@@ -17,12 +17,26 @@ const FormView = {
   BODY: "body",
 };
 
+export type HttpResponse = {
+  status: number;
+  statusText: string;
+  headers: Record<string, string>;
+  body: string;
+  time: number;
+  size: number;
+  error?: string;
+};
+
+type RequestState = "idle" | "loading" | "success" | "error";
+
 const METHODS_WITH_BODY = ["POST", "PUT", "PATCH"];
 
 const RequestFrom = () => {
   const [db, refreshStorage] = useStorage();
   const { theme } = useTheme();
   const [view, setView] = useState(FormView.PARAMS);
+  const [requestState, setRequestState] = useState<RequestState>("idle");
+  const [response, setResponse] = useState<HttpResponse | null>(null);
   const tab = db.getData().activeTab;
   const tabRequest: HttpRequest | null = tab?.createdAt ? tab.request : null;
 
@@ -55,6 +69,89 @@ const RequestFrom = () => {
       borderLeftWidth: "0.2rem",
     },
   });
+
+  const sendRequest = async () => {
+    const req = tab?.request;
+    if (!req) return;
+
+    const errors: string[] = [];
+
+    // Validate URL
+    let url: URL | null = null;
+    try {
+      url = new URL(req.url);
+    } catch {
+      errors.push("not a valid url");
+    }
+
+    // Validate headers
+    Object.entries(req.headers ?? {}).forEach(([k, v]) => {
+      if (!k || !v) {
+        errors.push("malformed header");
+      }
+    });
+
+    // Validate query params
+    if (url) {
+      url.searchParams.forEach((value, key) => {
+        if (!key || !value) {
+          errors.push("malformed query param");
+        }
+      });
+    }
+
+    if (errors.length) {
+      setRequestState("error");
+      setResponse({
+        status: 0,
+        statusText: "",
+        headers: {},
+        body: "",
+        time: 0,
+        size: 0,
+        error: errors.join(", "),
+      });
+      return;
+    }
+
+    try {
+      setRequestState("loading");
+
+      const start = performance.now();
+
+      const res = await fetch(req.url, {
+        method: req.method,
+        headers: req.headers,
+        body: req.body ?? undefined,
+      });
+
+      const text = await res.text();
+      const end = performance.now();
+
+      setResponse({
+        status: res.status,
+        statusText: res.statusText,
+        headers: Object.fromEntries(res.headers.entries()),
+        body: text,
+        time: Math.round(end - start),
+        size: new Blob([text]).size,
+      });
+
+      setRequestState("success");
+    } catch {
+      setRequestState("error");
+
+      setResponse({
+        status: 0,
+        statusText: "",
+        headers: {},
+        body: "",
+        time: 0,
+        size: 0,
+        error: "server can't be reached",
+      });
+    }
+  };
 
   return (
     <>
@@ -106,7 +203,7 @@ const RequestFrom = () => {
                 <button
                   type="button"
                   className="send-button form-header-button"
-                  onClick={() => {}}
+                  onClick={sendRequest}
                 >
                   Send
                 </button>
