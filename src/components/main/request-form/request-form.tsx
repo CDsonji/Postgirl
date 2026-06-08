@@ -78,11 +78,27 @@ const RequestFrom = () => {
                   value={tabRequest.url}
                   placeholder="Enter the URL of the Request"
                   onChange={(e) => {
-                    db.updateTabForm(tabRequest.id, {
-                      ...tabRequest,
-                      url: e.target.value,
-                    });
-                    refreshStorage();
+                    const newUrl = e.target.value;
+
+                    try {
+                      const url = new URL(newUrl);
+
+                      const params: Record<string, string> = {};
+                      url.searchParams.forEach((value, key) => {
+                        params[key] = value;
+                      });
+
+                      db.updateTabForm(tabRequest.id, {
+                        url: newUrl,
+                        params,
+                      });
+
+                      refreshStorage();
+                    } catch {
+                      // if the URL is temporarily invalid while typing
+                      db.updateTabForm(tabRequest.id, { url: newUrl });
+                      refreshStorage();
+                    }
                   }}
                 />
               </div>

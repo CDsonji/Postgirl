@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useStorage } from "../../../../db/storage-context";
 import type { HttpRequest } from "../../../../db/data/data-manager-interface";
+// import "./params-view.css";
 
 type Props = {
   request: HttpRequest;
@@ -8,20 +9,16 @@ type Props = {
 
 const HeadersView = ({ request }: Props) => {
   const [db, refreshStorage] = useStorage();
-  const [headers, setHeaders] = useState<[string, string][]>(
-    Object.entries(request.headers ?? {})
-  );
+  const [headers, setHeaders] = useState<[string, string][]>([]);
 
   useEffect(() => {
-    setHeaders(Object.entries(request.headers ?? {}));
+    const entries = Object.entries(request.headers ?? {});
+    setHeaders([...entries, ["", ""]]); // always keep empty row
   }, [request]);
 
-  const update = (pairs: [string, string][]) => {
-    const obj: Record<string, string> = {};
-
-    pairs.forEach(([k, v]) => {
-      if (k) obj[k] = v;
-    });
+  const update = (rows: [string, string][]) => {
+    const valid = rows.filter(([k]) => k !== "");
+    const obj = Object.fromEntries(valid);
 
     db.updateTabForm(request.id, {
       headers: obj,
@@ -30,22 +27,23 @@ const HeadersView = ({ request }: Props) => {
     refreshStorage();
   };
 
-  const changeKey = (i: number, val: string) => {
+  const updateRow = (index: number, key?: string, value?: string) => {
     const copy = [...headers];
-    copy[i][0] = val;
-    setHeaders(copy);
-    update(copy);
-  };
 
-  const changeValue = (i: number, val: string) => {
-    const copy = [...headers];
-    copy[i][1] = val;
-    setHeaders(copy);
-    update(copy);
-  };
+    if (key !== undefined) copy[index][0] = key;
+    if (value !== undefined) copy[index][1] = value;
 
-  const addRow = () => {
-    setHeaders([...headers, ["", ""]]);
+    let rows = copy.filter(
+      ([k, v], i) => !(k === "" && v === "" && i !== copy.length - 1)
+    );
+
+    const last = rows[rows.length - 1];
+    if (last[0] !== "" || last[1] !== "") {
+      rows.push(["", ""]);
+    }
+
+    setHeaders(rows);
+    update(rows);
   };
 
   return (
@@ -57,20 +55,18 @@ const HeadersView = ({ request }: Props) => {
               className="kv-input"
               placeholder="key"
               value={k}
-              onChange={(e) => changeKey(i, e.target.value)}
+              onChange={(e) => updateRow(i, e.target.value)}
             />
+
             <input
               className="kv-input second-input"
               placeholder="value"
               value={v}
-              onChange={(e) => changeValue(i, e.target.value)}
+              onChange={(e) => updateRow(i, undefined, e.target.value)}
             />
           </div>
         ))}
       </div>
-      <button type="button" className="add-kv" onClick={addRow}>
-        Add Header
-      </button>
     </div>
   );
 };
