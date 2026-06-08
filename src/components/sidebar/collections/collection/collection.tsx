@@ -17,7 +17,7 @@ const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
   const isCollectionOpen = collection.isOpen;
-  const activeId = db.getData().activeTab?.requestId;
+  const activeId = db.getData().activeTab?.request.id;
 
   return (
     <>
@@ -34,7 +34,7 @@ const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
           >
             <img
               className="icon"
-              src={`./../../../../../src/assets/${
+              src={`./../../../../../public/assets/${
                 isCollectionOpen ? "open-" : ""
               }collection-${theme === Theme.LIGHT ? "light" : "dark"}.svg`}
               alt="settings-logo"
@@ -74,7 +74,7 @@ const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
             >
               <img
                 className="collection-item-button-icon"
-                src={`./../../../../../src/assets/add-request-${
+                src={`./../../../../../public/assets/add-request-${
                   theme === Theme.LIGHT ? "light" : "dark"
                 }.svg`}
                 alt="add-logo"
@@ -89,7 +89,7 @@ const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
             >
               <img
                 className="collection-item-button-icon"
-                src={`./../../../../../src/assets/delete-${
+                src={`./../../../../../public/assets/delete-${
                   theme === Theme.LIGHT ? "light" : "dark"
                 }.svg`}
                 alt="add-logo"

@@ -1,12 +1,12 @@
 .request-item-method,
 .request-item-url {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
 }
 
 .request-item {
   position: relative;
   display: grid;
-  grid-template-columns: 5rem 77%;
+  grid-template-columns: 5.2rem 77%;
   column-gap: 1rem;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
@@ -19,13 +19,14 @@
 }
 
 .request-item-method {
-  text-align: center;
+  text-align: right;
   margin: 0rem;
   margin-left: 0.5rem;
 }
 
 .request-item-url {
   overflow-x: hidden;
+  font-weight: normal;
   padding-right: 0.2rem;
   margin: 0rem;
 }

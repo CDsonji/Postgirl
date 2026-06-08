@@ -28,8 +28,9 @@ export default function MethodSelect({ value, onChange }: Props) {
       >
         <div className="method-dropdown-text-container">
           <span className={`method ${value}`}>{value}</span>
-          <img className="dropdown-logo"
-            src={`./../../../../src/assets/dropdown-${
+          <img
+            className="dropdown-logo"
+            src={`./../../../../public/assets/dropdown-${
               theme === Theme.DARK ? "dark" : "light"
             }.svg`}
             alt="dropdown-logo"

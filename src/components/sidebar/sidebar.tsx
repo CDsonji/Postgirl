@@ -11,7 +11,7 @@ const SidebarView = {
 };
 
 const Sidebar = () => {
-  const [view, setView] = useState(SidebarView.HISTORY);
+  const [view, setView] = useState(SidebarView.REQUESTS);
 
   return (
     <>

@@ -43,6 +43,13 @@
   --form-input: #097BED;
 }
 
+@font-face {
+  font-family: "roboto";
+  src: url("./../public/fonts/Roboto.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   transition: background-color 0.3s ease, color 0.3s ease,
     border-color 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
@@ -51,7 +58,8 @@
 
 html {
   font-size: clamp(8px, 0.833vw, 62.5%);
-  font-family: Calibri, "Trebuchet MS", sans-serif;
+  font-family: "roboto",Calibri, "Trebuchet MS", sans-serif;
+  letter-spacing: 0.4px;
 }
 
 body {

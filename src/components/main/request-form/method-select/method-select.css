@@ -23,17 +23,17 @@
 
 .method-menu {
   position: absolute;
-  top: 100%;
+  top: 120%;
   left: 0;
   border: 0.2rem solid var(--component-border);
   background: var(--page-primary-background);
-  width: 11rem;
+  width: 97%;
   z-index: 10;
   border-radius: 0.5rem;
 }
 
 .method-option {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   text-align: center;
   padding: 0.6rem 1rem;
   cursor: pointer;

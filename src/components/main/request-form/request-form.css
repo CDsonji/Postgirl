@@ -6,7 +6,8 @@
 .form-header-buttons,
 .request-form,
 .url-container,
-.save-button-container {
+.save-button-container,
+.reset-button-container {
   display: flex;
 }
 
@@ -22,7 +23,8 @@
 .url-container {
   height: 100%;
   border: 0.2rem solid var(--component-border);
-  width: 82%;
+  /* width: 73%; */
+  flex: 1;
   align-items: center;
   border-radius: 0.5rem;
 }
@@ -46,7 +48,7 @@
 }
 
 .form-header-buttons {
-  margin-left: 1rem;
+  margin-left: 1.6rem;
   align-items: center;
 }
 
@@ -67,7 +69,7 @@
   color: white;
 }
 
-.save-button {
+.save-button, .reset-button {
   /* border: 0.2rem solid var(--component-border); */
   font-size: 1.6rem;
   background-color: var(--page-secondary-background);
@@ -75,15 +77,20 @@
   margin-left: 1.2rem;
 }
 
-.save-button:hover {
+.save-button:hover, .reset-button:hover {
     background-color: var(--icon-hover);
 }
 
-.save-button-container {
+.save-button-container, .reset-button-container {
   align-items: center;
 }
 
 .save-logo {
     margin-right: 0.8rem;
     height: 2.3rem;
+}
+
+.reset-logo {
+  height: 2rem;
+  margin-right: 0.8rem;
 }

@@ -3,7 +3,7 @@ import RequestItem from "../request-item/request-item";
 
 const Requests = () => {
   const [db] = useStorage();
-  const activeId = db.getData().activeTab?.requestId;
+  const activeId = db.getData().activeTab?.request.id;
 
   return (
     <>

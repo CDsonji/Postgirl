@@ -101,32 +101,97 @@ const sample = `{
   "tabs": {
     "req-1": {
       "createdAt": "1",
-      "requestId": "req-1"
+      "request": {
+        "id": "req-1",
+        "collectionId": "col-1",
+        "url": "https://api.example.com/users",
+        "method": "GET",
+        "params": {
+          "page": 1,
+          "limit": 10
+        },
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer token123"
+        },
+        "body": {
+          "name": "Alice",
+          "age": 25
+        }
+      }
     },
     "req-2": {
       "createdAt": "2",
-      "requestId": "req-2"
+      "request": {
+        "id": "req-2",
+        "collectionId": "col-1",
+        "url": "https://api.example.com/users",
+        "method": "POST",
+        "params": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "name": "Bob"
+        }
+      }
     },
     "req-3": {
       "createdAt": "3",
-      "requestId": "req-3"
+      "request": {
+        "id": "req-3",
+        "collectionId": "col-1",
+        "url": "https://api.example.com/users",
+        "method": "OPTIONS",
+        "params": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "name": "Bob"
+        }
+      }
     },
     "req-4": {
-      "createdAt": "4",
-      "requestId": "req-4"
+        "createdAt": "4",
+        "request": {
+        "id": "req-4",
+        "collectionId": "col-1",
+        "url": "https://api.example.com/users",
+        "method": "HEAD",
+        "params": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "name": "Bob"
+        }
+      } 
     }
   },
   "activeTab": {
       "createdAt": "2",
-      "requestId": "req-2"
+      "request": {
+        "id": "req-2",
+        "collectionId": "col-1",
+        "url": "https://api.example.com/users",
+        "method": "POST",
+        "params": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "name": "Bob"
+        }
+      }
     },
   "theme": "Light-Mode"
 }`;
 
-function normalizeTab(raw: any, fallbackId: string): Tab {
+function normalizeTab(raw: any): Tab {
   return {
-    createdAt: raw?.createdAt ?? fallbackId,
-    requestId: raw?.requestId,
+    createdAt: raw?.createdAt,
+    request: normalizeHttpRequest(raw?.request, raw?.request.id),
   };
 }
 
@@ -142,7 +207,7 @@ function normalizeHttpRequest(raw: any, fallbackId: string): HttpRequest {
   };
 }
 
-function normalizeCollection(raw: any, fallbackId: string): Collection {
+function normalizeCollection(raw: any, fallbackId: string | undefined): Collection {
   return {
     id: raw?.id ?? fallbackId,
     title: String(raw?.title ?? ""),
@@ -171,7 +236,7 @@ function normalizeData(parsed: Partial<Data>): Data {
   }
 
   for (const [id, rawTab] of Object.entries(parsed.tabs ?? {})) {
-    tabs[id] = normalizeTab(rawTab, id);
+    tabs[id] = normalizeTab(rawTab);
   }
 
   return {
@@ -179,7 +244,7 @@ function normalizeData(parsed: Partial<Data>): Data {
     collections,
     history,
     tabs,
-    activeTab: parsed.activeTab ?? null,
+    activeTab: normalizeTab(parsed.activeTab) ?? null,
     theme: parsed.theme ?? Theme.DARK,
   };
 }
@@ -198,10 +263,10 @@ export class BrowserLocalStorageManager implements LocalStorageManager {
   initialize(): DataManager {
     let manager: DataManager;
 
-    const rawData = 
-    typeof localStorage !== "undefined"
-      ? localStorage.getItem(this.storageKey) ?? sample
-      : sample;
+    const rawData =
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem(this.storageKey) ?? sample
+        : sample;
 
     try {
       const parsedData = JSON.parse(rawData) as Partial<Data>;

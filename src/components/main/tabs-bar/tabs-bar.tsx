@@ -7,7 +7,7 @@ import "./tabs-bar.css";
 const TabsBar = () => {
   const [db, refreshStorage] = useStorage();
   const { theme } = useTheme();
-  const activeId = db.getData().activeTab?.requestId;
+  const activeId = db.getData().activeTab?.request.id;
 
   return (
     <div className="tabs-container">
@@ -15,9 +15,9 @@ const TabsBar = () => {
         {db.getTabs().map((tab) => {
           return (
             <TabComponent
-              key={tab.requestId}
+              key={tab.request.id}
               tab={tab}
-              isActive={activeId === tab.requestId}
+              isActive={activeId === tab.request.id}
             />
           );
         })}
@@ -40,7 +40,7 @@ const TabsBar = () => {
         >
           <img
             className="add-tab-button-icon"
-            src={`./../../../../../src/assets/add-tab-${
+            src={`./../../../../../public/assets/add-tab-${
               theme === Theme.LIGHT ? "light" : "dark"
             }.svg`}
             alt="add-logo"

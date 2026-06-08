@@ -12,41 +12,43 @@ const RequestFrom = () => {
   const [db, refreshStorage] = useStorage();
   const { theme } = useTheme();
   const tab = db.getData().activeTab;
-  const request: HttpRequest | null = tab
-    ? db.getRequestById(tab.requestId)
-    : null;
-  const [form, setForm] = useState<HttpRequest | null>(request);
-  console.log(form);
 
-  useEffect(() => {
-    setForm(request);
-  }, [tab]);
+  const tabRequest: HttpRequest | null = tab ? tab.request : null;
+  // console.log(tabRequest);
+  // const [form, setForm] = useState<HttpRequest | null>(request);
+  // console.log(form);
 
-  //   const UpdateForm = (updates: Partial<HttpRequest | null>) => {
-  //     return {
-  //       ...form,
-  //       ...updates,
-  //     };
-  //   };
+  // useEffect(() => {
+  //   setForm(request);
+  // }, [tab]);
 
   return (
     <>
       <div className="requet-form-container">
-        {form ? (
+        {tabRequest ? (
           <form className="request-form">
             <div className="form-header">
               <div className="url-container">
                 <MethodSelect
-                  value={form.method}
-                  onChange={(m) => setForm({ ...form, method: m })}
+                  value={tabRequest.method}
+                  onChange={(m) => {
+                    db.updateTabForm(tabRequest.id, {
+                      method: m,
+                    });
+                    refreshStorage();
+                  }}
                 />
                 <input
                   type="text"
                   className="url-input"
-                  defaultValue={form.url}
+                  defaultValue={tabRequest.url}
                   placeholder="Enter the URL of the Request"
                   onChange={(e) => {
-                    setForm({ ...form, url: e.target.value });
+                    db.updateTabForm(tabRequest.id, {
+                      ...tabRequest,
+                      url: e.target.value,
+                    });
+                    refreshStorage();
                   }}
                 />
               </div>
@@ -58,16 +60,34 @@ const RequestFrom = () => {
                   Send
                 </button>
                 <button
+                  className="reset-button form-header-button"
+                  onClick={() => {
+                    db.updateRequest(tabRequest.id, { ...tabRequest });
+                    refreshStorage();
+                  }}
+                >
+                  <div className="reset-button-container">
+                    <img
+                      className="reset-logo"
+                      src={`./../../../public/assets/reset-${
+                        theme === Theme.DARK ? "dark" : "light"
+                      }.svg`}
+                      alt="reset-logo"
+                    />
+                    <span>Reset</span>
+                  </div>
+                </button>
+                <button
                   className="save-button form-header-button"
                   onClick={() => {
-                    db.updateRequest(form.id, { ...form });
+                    db.updateRequest(tabRequest.id, { ...tabRequest });
                     refreshStorage();
                   }}
                 >
                   <div className="save-button-container">
                     <img
                       className="save-logo"
-                      src={`./../../../src/assets/save-${
+                      src={`./../../../public/assets/save-${
                         theme === Theme.DARK ? "dark" : "light"
                       }.svg`}
                       alt="save-logo"

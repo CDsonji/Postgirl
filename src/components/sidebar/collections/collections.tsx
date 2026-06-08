@@ -8,7 +8,7 @@ const Collections = () => {
   const currentTab = db.getData().activeTab as Tab;
   let collectionId: string | undefined;
   currentTab
-    ? (collectionId = db.getRequestById(currentTab.requestId).collectionId)
+    ? (collectionId = db.getRequestById(currentTab.request.id).collectionId)
     : "";
 
   return (

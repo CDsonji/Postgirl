@@ -45,7 +45,7 @@ const RequestItem = ({ request, isActive }: RequestItemProps) => {
               >
                 <img
                   className="request-item-button-icon item-button-icon"
-                  src={`./../../../../src/assets/add-collection-${
+                  src={`./../../../../public/assets/add-collection-${
                     theme === Theme.LIGHT ? "light" : "dark"
                   }.svg`}
                   alt="add-logo"
@@ -58,9 +58,7 @@ const RequestItem = ({ request, isActive }: RequestItemProps) => {
                       key={collection.id}
                       className="collection-dropdown-item"
                       onClick={() => {
-                        db.updateRequest(request.id, {
-                          collectionId: collection.id,
-                        });
+                        db.addRequestToCollection(request.id, collection.id);
                         setOpenCollections(false);
                         refreshStorage();
                       }}
@@ -82,7 +80,7 @@ const RequestItem = ({ request, isActive }: RequestItemProps) => {
             >
               <img
                 className="request-item-button-icon item-button-icon"
-                src={`./../../../../src/assets/delete-${
+                src={`./../../../../public/assets/delete-${
                   theme === Theme.LIGHT ? "light" : "dark"
                 }.svg`}
                 alt="add-logo"

@@ -22,7 +22,7 @@ const Header = ({ settingsButtonAction, sidebarButtonAction }: HeaderProps) => {
         >
           <img
             className="icon"
-            src={`./src/assets/aside-${
+            src={`./public/assets/aside-${
               theme === Theme.LIGHT ? "light" : "dark"
             }.svg`}
             alt="aside-logo"
@@ -37,7 +37,7 @@ const Header = ({ settingsButtonAction, sidebarButtonAction }: HeaderProps) => {
       >
         <img
           className="icon"
-          src={`./src/assets/settings-${
+          src={`./public/assets/settings-${
             theme === Theme.LIGHT ? "light" : "dark"
           }.svg`}
           alt="settings-logo"
@@ -46,7 +46,7 @@ const Header = ({ settingsButtonAction, sidebarButtonAction }: HeaderProps) => {
       <div className="page-title">
         <img
           className="page-title-logo"
-          src="./src/assets/postgirl.svg"
+          src="./public/assets/postgirl.svg"
           alt="logo"
         />
         <h1 className="page-title-heading">Postgirl</h1>

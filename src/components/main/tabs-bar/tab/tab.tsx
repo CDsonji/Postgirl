@@ -12,14 +12,14 @@ type TabProps = {
 const TabComponent = ({ tab, isActive }: TabProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
-  const request = db.getRequestById(tab.requestId);
+  const request = db.getRequestById(tab.request.id);
   if (isActive) tab;
 
   return (
     <li
       className={`tab ${isActive ? "active-tab" : ""}`}
       onClick={() => {
-        db.updateCurrentTab(tab.requestId);
+        db.updateCurrentTab(tab.request.id);
         refreshStorage();
       }}
     >
@@ -39,7 +39,7 @@ const TabComponent = ({ tab, isActive }: TabProps) => {
       >
         <img
           className="tab-button-icon"
-          src={`./../../../../src/assets/exit-${
+          src={`./../../../../public/assets/exit-${
             theme === Theme.LIGHT ? "light" : "dark"
           }.svg`}
           alt="exit-logo"

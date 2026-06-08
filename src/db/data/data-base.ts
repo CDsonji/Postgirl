@@ -30,6 +30,44 @@ export class Database implements DataManager {
     };
   }
 
+  updateTabForm(
+    requestId: string,
+    updates: Partial<Omit<HttpRequest, "collectionId">>
+  ): void {
+    const tab = this.data.tabs[requestId];
+    if (!tab) {
+      throw new Error(`tab with request id "${requestId}" not found`);
+    }
+
+    const existing = tab.request;
+
+    const updatedTab = {
+      ...tab,
+      request: {
+        ...existing,
+        ...updates,
+        params: updates.params ? { ...updates.params } : existing.params,
+        headers: updates.headers ? { ...updates.headers } : existing.headers,
+        body: updates.body
+          ? { ...updates.body }
+          : updates.body === undefined
+          ? existing.body
+          : undefined,
+      },
+    };
+
+    this.data = {
+      ...this.data,
+      tabs: {
+        ...this.data.tabs,
+        [requestId]: updatedTab,
+      },
+      activeTab: updatedTab,
+    };
+
+    console.log(this.data.tabs[requestId]);
+  }
+
   getTabs(): Tab[] {
     return Object.values(this.data.tabs)
       .sort((a, b) => Number(a.createdAt) - Number(b.createdAt))
@@ -42,7 +80,7 @@ export class Database implements DataManager {
     if (!tab) {
       const newTab: Tab = {
         createdAt: String(Date.now()),
-        requestId: request.id,
+        request: request,
       };
 
       this.data = {
@@ -72,9 +110,9 @@ export class Database implements DataManager {
       throw new Error(`No Tab with current request id ${requestId} found`);
     }
     const tabs = this.getTabs();
-    let index = tabs.findIndex((t) => t.requestId === requestId);
+    let index = tabs.findIndex((t) => t.request.id === requestId);
     let current = tabs.findIndex(
-      (t) => t.requestId === this.data.activeTab?.requestId
+      (t) => t.request.id === this.data.activeTab?.request.id
     );
     // console.log(`current: ${current}`);
     // console.log(`index: ${index} ${index===0} ${index + 1 < tabs.length}`);
@@ -82,14 +120,14 @@ export class Database implements DataManager {
       if (index === 0) {
         if (index + 1 < tabs.length) {
           // console.log("next");
-          this.updateCurrentTab(tabs[index + 1].requestId);
+          this.updateCurrentTab(tabs[index + 1].request.id);
         } else {
           // console.log("null");
           this.updateCurrentTab();
         }
       } else {
         // console.log("previous");
-        this.updateCurrentTab(tabs[index! - 1].requestId);
+        this.updateCurrentTab(tabs[index! - 1].request.id);
       }
     }
 
@@ -277,16 +315,6 @@ export class Database implements DataManager {
       throw new Error(`Request with id "${requestId}" not found`);
     }
 
-    if (
-      updates.collectionId !== undefined &&
-      updates.collectionId !== "" &&
-      !this.hasCollection(updates.collectionId)
-    ) {
-      throw new Error(
-        `Collection with id "${updates.collectionId}" does not exist`
-      );
-    }
-
     const updatedRequest: HttpRequest = {
       ...existing,
       ...updates,
@@ -304,6 +332,43 @@ export class Database implements DataManager {
       requests: {
         ...this.data.requests,
         [requestId]: updatedRequest,
+      },
+    };
+  }
+
+  addRequestToCollection(requestId: string, collectionId: string): void {
+    const request = this.data.requests[requestId];
+
+    if (!request) {
+      throw new Error(`request with id ${requestId} not found`);
+    }
+
+    const tab = this.data.tabs[requestId];
+
+    if (tab) {
+      this.data = {
+        ...this.data,
+        tabs: {
+          ...this.data.tabs,
+          [requestId]: {
+            ...tab,
+            request: {
+              ...tab.request,
+              collectionId: collectionId,
+            },
+          },
+        },
+      };
+    }
+
+    this.data = {
+      ...this.data,
+      requests: {
+        ...this.data.requests,
+        [requestId]: {
+          ...request,
+          collectionId: collectionId,
+        },
       },
     };
   }

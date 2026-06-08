@@ -20,7 +20,7 @@ const Settings = ({ exitButtonAction }: SettingsProps) => {
         >
           <img
             className="icon"
-            src={`./src/assets/exit-${
+            src={`./public/assets/exit-${
               theme === Theme.LIGHT ? "light" : "dark"
             }.svg`}
             alt="exit-logo"

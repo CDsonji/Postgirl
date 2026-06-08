@@ -46,7 +46,7 @@ export interface Data {
 
 export interface Tab {
   createdAt: string;
-  requestId: string;
+  request: HttpRequest;
 }
 
 export interface DataManager {
@@ -68,7 +68,11 @@ export interface DataManager {
   hasCollection(id: string): boolean;
 
   addRequest(request: HttpRequest): HttpRequest;
-  updateRequest(requestId: string, updates: Partial<HttpRequest>): void;
+  updateRequest(
+    requestId: string,
+    updates: Partial<Omit<HttpRequest, "collectionId">>
+  ): void;
+  addRequestToCollection(requestId: string, collectionId: string): void;
   removeRequest(id: string): HttpRequest;
 
   addCollection(collection: Collection): void;
@@ -82,6 +86,10 @@ export interface DataManager {
   getTabs(): Tab[];
   addTab(requestId: string): void;
   updateCurrentTab(requestId: string): void;
+  updateTabForm(
+    requestId: string,
+    updates: Partial<Omit<HttpRequest, "collectionId">>
+  ): void;
   removeTab(requestId: string): Tab;
 
   clearRequests(): void;
