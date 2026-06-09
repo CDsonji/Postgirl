@@ -1,20 +1,22 @@
 aside {
-  /* change the width */
   width: 23vw;
   height: 91vh;
   border: 0.2rem solid var(--component-border);
   background-color: var(--page-secondary-background);
   padding: 0rem;
+  display: flex;
+  flex-direction: column;
 }
 
 @media only screen and (max-width: 1237px) {
   aside {
     background-color: var(--page-primary-background);
-    width: 27rem;
+    width: min(27rem, 50%);
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     top: 0;
     left: 0;
+    box-shadow: 5px 10px 15px var(--sidebar-box-shadow);
   }
 }
 
@@ -26,15 +28,16 @@ aside {
   border-radius: 0.7rem;
 }
 
-
 .sidebar-view-buttons {
   display: flex;
   flex-direction: row;
-  height: 4rem
+  height: 4rem;
 }
 
 .sidebar-view-button {
-  width: 33.3%;
+  min-width: 0;
+  font-size: 1.26rem;
+  flex: 1;
   background: none;
   border: none;
   color: var(--text-color);
@@ -67,6 +70,28 @@ aside {
   border-bottom: 0.2rem solid var(--component-border);
 }
 
-.view-conatainer {
-  /* overflow: auto; */
+.view-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.view-container > *:not(.add-collection) {
+  min-height: 0;
+  flex: 0 1 1;
+  overflow-y: auto;
+}
+
+.view-container > *:not(.add-collection)::-webkit-scrollbar {
+  width: 0.5rem; /* thin horizontal scrollbar */
+}
+
+.view-container > *:not(.add-collection)::-webkit-scrollbar-track {
+  background: transparent; /* no big track */
+}
+
+.view-container > *:not(.add-collection)::-webkit-scrollbar-thumb {
+  background-color: #666; /* solid color */
+  border-radius: 0.4rem;
 }

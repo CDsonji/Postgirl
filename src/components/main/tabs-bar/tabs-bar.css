@@ -18,7 +18,7 @@
 }
 
 .tabs-list::-webkit-scrollbar {
-  height: 0.4rem; /* thin horizontal scrollbar */
+  height: 0.35rem; /* thin horizontal scrollbar */
 }
 
 .tabs-list::-webkit-scrollbar-track {

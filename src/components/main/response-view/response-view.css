@@ -6,38 +6,45 @@
 
 .response-header {
   display: flex;
-  justify-content: space-between;
+  /* flex-direction: row-reverse; */
+  row-gap: 0.8rem;
   align-items: center;
   margin-bottom: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.form-view-button {
-  padding: 0.5rem 2rem;
+.response-view-buttons {
+  margin-right: auto;
 }
 
 .response-meta {
   display: flex;
+  /* margin-left: auto; */
   gap: 1.5rem;
   font-size: 1.2rem;
   margin-right: 2rem;
 }
 
+.form-view-button {
+  padding: 0.5rem 2rem;
+}
 .status-code.error {
-    color: red;
+  color: red;
 }
 
 .status-code.success {
-    color: var(--status-success);
+  color: var(--status-success);
 }
 
-.time, .size {
-    color: var(--response-meta);
+.time,
+.size {
+  color: var(--response-meta);
 }
 
 .response-body-container {
-    flex: 1 1 0;
-    min-height: 0;
-    overflow-y: auto;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .response-body-container::-webkit-scrollbar {

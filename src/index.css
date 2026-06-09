@@ -24,6 +24,7 @@
   --form-input: #488fe6;
   --status-success: green;
   --response-meta: rgb(159, 159, 0);
+  --sidebar-box-shadow: rgb(65, 65, 65);
 }
 
 :root[data-theme="Dark-Mode"] {
@@ -42,9 +43,10 @@
   --options: #d9579f;
   --connect: #00c3d8;
   --trace: #fe8585;
-  --form-input: #097BED;
+  --form-input: #097bed;
   --status-success: lightgreen;
   --response-meta: rgb(255, 255, 141);
+  --sidebar-box-shadow: rgb(69, 68, 68);
 }
 
 @font-face {
@@ -62,8 +64,13 @@
 
 html {
   font-size: clamp(8px, 0.833vw, 62.5%);
-  font-family: "roboto",Calibri, "Trebuchet MS", sans-serif;
+  font-family: "roboto", Calibri, "Trebuchet MS", sans-serif;
   letter-spacing: 0.4px;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
 }
 
 body {
@@ -87,7 +94,7 @@ body {
 }
 
 .icon {
-  height: 2rem;
+  height: 20px;
 }
 
 span.method {

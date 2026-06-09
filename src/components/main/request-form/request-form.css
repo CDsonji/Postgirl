@@ -32,7 +32,7 @@
 
 .form-header {
   height: 3.5rem;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 
 .request-form {
@@ -51,6 +51,7 @@
 
 .url-input {
   box-sizing: border-box;
+  font-size: 1.2rem;
   padding: 1rem;
   height: 100%;
   margin-left: 0.315rem;
@@ -96,6 +97,36 @@
   background-color: var(--page-secondary-background);
   color: var(--text-color);
   margin-left: 1.2rem;
+}
+
+@media only screen and (max-width: 1000px) {
+  .form-header {
+    height: auto;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-header > * {
+    height: 3.5rem;
+  }
+
+  .form-header-buttons {
+    margin-left: 0;
+    align-self: center;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .url-container {
+    flex-direction: column-reverse;
+    margin-bottom: 0.5rem;
+  }
+
+  .url-input {
+    width: 100%;
+    border-left: none;
+    margin: 0;
+  }
 }
 
 .save-button:hover,

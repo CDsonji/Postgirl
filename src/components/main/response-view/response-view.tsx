@@ -3,8 +3,6 @@ import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import { json } from "@codemirror/lang-json";
 import type { HttpResponse } from "../request-form/request-form";
 import "./response-view.css";
-import { useTheme } from "../../theme/theme-context";
-import { Theme } from "../../../db/data/data-manager-interface";
 
 type ResponseViewProps = {
   response: HttpResponse;
@@ -12,7 +10,6 @@ type ResponseViewProps = {
 
 const ResponseView = ({ response }: ResponseViewProps) => {
   const [view, setView] = useState<"body" | "headers">("body");
-  const { theme } = useTheme();
 
   const ReadOnlyTheme = EditorView.theme({
     "&": {
@@ -32,10 +29,6 @@ const ResponseView = ({ response }: ResponseViewProps) => {
       backgroundColor: "transparent",
     },
     ".cm-activeLine": {
-      // backgroundColor:
-      //   theme === Theme.DARK
-      //     ? "rgba(255, 255, 255, 0.03)"
-      //     : "rgba(0, 0, 0, 0.1)",
       backgroundColor: "transparent",
     },
   });
@@ -112,22 +105,23 @@ const ResponseView = ({ response }: ResponseViewProps) => {
 
         {view === "headers" && (
           <div className="kvs-container">
-            {Object.entries(response.headers).map(([k, v], i) => (
-              <div className="kv-item" key={i}>
-                <input
-                  className="kv-input"
-                  placeholder="key"
-                  value={k}
-                  readOnly
-                />
-                <input
-                  className="kv-input second-input"
-                  placeholder="value"
-                  value={v}
-                  readOnly
-                />
-              </div>
-            ))}
+            {response.headers &&
+              Object.entries(response.headers).map(([k, v], i) => (
+                <div className="kv-item" key={i}>
+                  <input
+                    className="kv-input"
+                    placeholder="key"
+                    value={k}
+                    readOnly
+                  />
+                  <input
+                    className="kv-input second-input"
+                    placeholder="value"
+                    value={v}
+                    readOnly
+                  />
+                </div>
+              ))}
           </div>
         )}
       </div>

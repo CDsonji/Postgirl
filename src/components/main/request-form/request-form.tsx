@@ -12,6 +12,7 @@ import HeadersView from "./headers-view/headers-view";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import ResponseView from "../response-view/response-view";
 import InternalErrorView from "../internal-error-view/internal-error-view";
+import { json } from "@codemirror/lang-json";
 
 const FormView = {
   HEADERS: "headers",
@@ -52,35 +53,35 @@ const RequestFrom = () => {
     // setResponse()
   }, [tab?.createdAt]);
 
-  const Themeee = EditorView.theme({
-    "&": {
-      backgroundColor: "var(--page-secondary-background)",
-      color: "var(--text-color)",
-      fontSize: "1.3rem",
-      border: "0.2rem solid var(--component-border)",
-    },
-    ".cm-activeLine": {
-      backgroundColor:
-        theme === Theme.DARK
-          ? "rgba(255, 255, 255, 0.03)"
-          : "rgba(0, 0, 0, 0.1)",
-    },
-    ".cm-gutters": {
-      backgroundColor: "var(--page-secondary-background)",
-      color: "#858585",
-      border: "none",
-    },
-    ".cm-content": {
-      backgroundColor: "var(--page-primary-background)",
-    },
-    ".cm-activeLineGutter": {
-      backgroundColor: "transparent",
-    },
-    ".cm-cursor": {
-      borderLeftColor: "var(--text-color)",
-      borderLeftWidth: "0.2rem",
-    },
-  });
+  // const Themeee = EditorView.theme({
+  //   "&": {
+  //     backgroundColor: "var(--page-secondary-background)",
+  //     color: "var(--text-color)",
+  //     fontSize: "1.3rem",
+  //     border: "0.2rem solid var(--component-border)",
+  //   },
+  //   ".cm-activeLine": {
+  //     backgroundColor:
+  //       theme === Theme.DARK
+  //         ? "rgba(255, 255, 255, 0.03)"
+  //         : "rgba(0, 0, 0, 0.1)",
+  //   },
+  //   ".cm-gutters": {
+  //     backgroundColor: "var(--page-secondary-background)",
+  //     color: "#858585",
+  //     border: "none",
+  //   },
+  //   ".cm-content": {
+  //     backgroundColor: "var(--page-primary-background)",
+  //   },
+  //   ".cm-activeLineGutter": {
+  //     backgroundColor: "transparent",
+  //   },
+  //   ".cm-cursor": {
+  //     borderLeftColor: "var(--text-color)",
+  //     borderLeftWidth: "0.2rem",
+  //   },
+  // });
 
   const sendRequest = async () => {
     const req = tab?.request;
@@ -148,6 +149,7 @@ const RequestFrom = () => {
       });
 
       const data = await proxyRes.json();
+      console.log(data);
       const end = performance.now();
 
       if (!proxyRes.ok) {
@@ -163,19 +165,6 @@ const RequestFrom = () => {
         time: Math.round(end - start),
         size: new Blob([data.body]).size,
       };
-      // const start = performance.now();
-
-      // console.log(req);
-
-      // const res = await fetch(req.url, {
-      //   method: req.method,
-      //   headers: req.headers,
-      //   body: req.body ?? undefined,
-      // });
-
-      // const text = await res.text();
-      // const end = performance.now();
-
       setRequestState("success");
       db.setTabResponse(tabRequest?.id as string, {
         status: res.status,
@@ -200,6 +189,8 @@ const RequestFrom = () => {
       });
       refreshStorage();
     }
+    db.addRequestToHistory({ ...tabRequest! });
+    refreshStorage();
   };
 
   return (
@@ -344,7 +335,39 @@ const RequestFrom = () => {
                     <CodeMirror
                       value={tabRequest.body ?? ""}
                       height="100%"
-                      extensions={[Themeee]}
+                      extensions={[
+                        EditorView.lineWrapping,
+                        json(),
+                        EditorView.theme({
+                          "&": {
+                            backgroundColor: "var(--page-secondary-background)",
+                            color: "var(--text-color)",
+                            fontSize: "1.3rem",
+                            border: "0.2rem solid var(--component-border)",
+                          },
+                          ".cm-activeLine": {
+                            backgroundColor:
+                              theme === Theme.DARK
+                                ? "rgba(255, 255, 255, 0.03)"
+                                : "rgba(0, 0, 0, 0.1)",
+                          },
+                          ".cm-gutters": {
+                            backgroundColor: "var(--page-secondary-background)",
+                            color: "#858585",
+                            border: "none",
+                          },
+                          ".cm-content": {
+                            backgroundColor: "var(--page-primary-background)",
+                          },
+                          ".cm-activeLineGutter": {
+                            backgroundColor: "transparent",
+                          },
+                          ".cm-cursor": {
+                            borderLeftColor: "var(--text-color)",
+                            borderLeftWidth: "0.2rem",
+                          },
+                        }),
+                      ]}
                       onChange={(value) => {
                         db.updateTabForm(tabRequest.id, { body: value });
                         refreshStorage();

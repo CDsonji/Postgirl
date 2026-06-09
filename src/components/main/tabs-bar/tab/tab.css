@@ -46,6 +46,13 @@
   background-color: var(--page-secondary-background);
 }
 
+@media only screen and (max-width: 1237px) {
+  .tab-button {
+    display: flex;
+    background-color: var(--page-secondary-background);
+  }
+}
+
 .tab:hover .tab-button {
   display: flex;
   justify-content: center;

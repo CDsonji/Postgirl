@@ -7,7 +7,7 @@ const Requests = () => {
 
   return (
     <>
-      <ul className="request-list">
+      <ul className="request-list sidebar-requests-list">
         {db.getAllRequests().map((request) => {
           return (
             <RequestItem

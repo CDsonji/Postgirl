@@ -241,10 +241,10 @@ export class Database implements DataManager {
     );
   }
 
-  getRequestHistory(): HttpRequest[] {
-    return Object.keys(this.data.history)
-      .sort((a, b) => Number(a) - Number(b))
-      .map((timestamp) => this.data.history[timestamp]);
+  getRequestHistory(): [timestamp:string,request:HttpRequest][] {
+    return Object.entries(this.data.history)
+      .sort((a, b) => Number(b[0]) - Number(a[0]))
+      // .map((timestamp) => this.data.history[timestamp]);
   }
 
   getPartialRequestHistory(start: number = 0, end: number): HttpRequest[] {

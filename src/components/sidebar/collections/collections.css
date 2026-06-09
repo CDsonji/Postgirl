@@ -1,28 +1,33 @@
 .collections-list {
-    list-style-type: none;
-    padding-left: 0rem;
-    margin-bottom: 1rem;
-    margin-top: 0rem;
-    height: 77vh;
-    overflow-y: auto;
+  list-style-type: none;
+  padding-left: 0rem;
+  margin-bottom: 1rem;
+  margin-top: 0rem;
 }
 
+/* .collections-list::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+} */
+
 .add-collection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .add-collection-button {
-    text-align: center;
-    text-justify: center;
-    padding: 1rem 1.5rem;
-    border: 0.2rem solid var(--component-border);
-    border-radius: 0.6rem;
-    background-color: var(--page-primary-background);
-    color: var(--text-color);
+  font-size: 1.3rem;
+  text-align: center;
+  text-justify: center;
+  padding: 1rem 1.5rem;
+  border: 0.2rem solid var(--component-border);
+  border-radius: 0.6rem;
+  background-color: var(--page-primary-background);
+  color: var(--text-color);
 }
 
 .add-collection-button:hover {
-    background-color: var(--text-hover);
+  background-color: var(--text-hover);
 }

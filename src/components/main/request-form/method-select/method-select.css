@@ -6,6 +6,7 @@
 .method-btn {
   width: 10.5rem;
   height: 100%;
+  font-size: 1.32rem;
   padding: 0.6rem 1.2rem;
   background: var(--page-secondary-background);
   cursor: pointer;
@@ -15,6 +16,7 @@
 }
 
 .method-menu {
+  min-width: 10rem;
   position: absolute;
   top: 120%;
   left: 0;
@@ -43,6 +45,35 @@
 }
 
 .dropdown-logo {
-    height: 2rem;
+  height: 2rem;
+  margin-left: auto;
+}
+
+@media only screen and (max-width: 1237px) {
+  .dropdown-logo {
+    margin-left: 0.5rem;
+  }
+
+  .method-btn {
+    width: auto;
+    padding-right: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .method-btn {
+    width: 9rem;
+
+  }
+
+  .dropdown-logo {
     margin-left: auto;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .method-btn {
+    width: auto;
+    padding-right: 0.5rem;
+  }
 }

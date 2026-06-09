@@ -70,7 +70,7 @@ export interface DataManager {
   getAllCollections(): Collection[];
   getRequestsFromCollectionById(collectionId: string): HttpRequest[];
 
-  getRequestHistory(): HttpRequest[];
+  getRequestHistory(): [timestamp: string, request: HttpRequest][];
   // getPartialRequestHistory(start: number, end: number): HttpRequest[];
   addRequestToHistory(request: HttpRequest): void;
   // removeRequestFromHistory(timestamp: number): HttpRequest;
