@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
+import { json } from "@codemirror/lang-json";
 import type { HttpResponse } from "../request-form/request-form";
 import "./response-view.css";
 import { useTheme } from "../../theme/theme-context";
@@ -31,10 +32,11 @@ const ResponseView = ({ response }: ResponseViewProps) => {
       backgroundColor: "transparent",
     },
     ".cm-activeLine": {
-      backgroundColor:
-        theme === Theme.DARK
-          ? "rgba(255, 255, 255, 0.03)"
-          : "rgba(0, 0, 0, 0.1)",
+      // backgroundColor:
+      //   theme === Theme.DARK
+      //     ? "rgba(255, 255, 255, 0.03)"
+      //     : "rgba(0, 0, 0, 0.1)",
+      backgroundColor: "transparent",
     },
   });
 
@@ -88,12 +90,10 @@ const ResponseView = ({ response }: ResponseViewProps) => {
             </span>
           </span>
           <span>
-            Time:{" "}
-            <span className="time">{response.time} ms</span>
+            Time: <span className="time">{response.time} ms</span>
           </span>
           <span>
-            Size:{" "}
-            <span className="size">{sizeInB} B</span>
+            Size: <span className="size">{sizeInB} B</span>
           </span>
         </div>
       </div>
@@ -104,7 +104,7 @@ const ResponseView = ({ response }: ResponseViewProps) => {
           <CodeMirror
             value={response.body}
             height="100%"
-            extensions={[ReadOnlyTheme]}
+            extensions={[ReadOnlyTheme, EditorView.lineWrapping, json()]}
             readOnly={true}
             editable={false}
           />

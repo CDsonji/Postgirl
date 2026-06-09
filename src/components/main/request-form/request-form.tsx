@@ -11,6 +11,7 @@ import ParamsView from "./params-view/params-view";
 import HeadersView from "./headers-view/headers-view";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import ResponseView from "../response-view/response-view";
+import InternalErrorView from "../internal-error-view/internal-error-view";
 
 const FormView = {
   HEADERS: "headers",
@@ -38,7 +39,7 @@ const RequestFrom = () => {
   const [view, setView] = useState(FormView.PARAMS);
   const [requestState, setRequestState] = useState<RequestState>("idle");
   const tab = db.getData().activeTab;
-  console.log("active tab: ",tab);
+  console.log("active tab: ", tab);
   // const [response, setResponse] = useState<HttpResponse | null>(
   //   tab?.response || null
   // );
@@ -129,28 +130,63 @@ const RequestFrom = () => {
     try {
       setRequestState("loading");
 
+      // Record start time
       const start = performance.now();
 
-      const res = await fetch(req.url, {
-        method: req.method,
-        headers: req.headers,
-        body: req.body ?? undefined,
+      // Send request data to your local proxy
+      const proxyRes = await fetch("http://localhost:3001/proxy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: req.url,
+          method: req.method,
+          headers: req.headers,
+          body: req.body,
+        }),
       });
 
-      const text = await res.text();
+      const data = await proxyRes.json();
       const end = performance.now();
+
+      if (!proxyRes.ok) {
+        throw new Error(data.error || "Proxy failed");
+      }
+
+      // Format the response for your UI state
+      const res = {
+        status: data.status,
+        statusText: data.statusText,
+        headers: data.headers,
+        body: data.body,
+        time: Math.round(end - start),
+        size: new Blob([data.body]).size,
+      };
+      // const start = performance.now();
+
+      // console.log(req);
+
+      // const res = await fetch(req.url, {
+      //   method: req.method,
+      //   headers: req.headers,
+      //   body: req.body ?? undefined,
+      // });
+
+      // const text = await res.text();
+      // const end = performance.now();
 
       setRequestState("success");
       db.setTabResponse(tabRequest?.id as string, {
         status: res.status,
         statusText: res.statusText,
-        headers: Object.fromEntries(res.headers.entries()),
-        body: text,
-        time: Math.round(end - start),
-        size: new Blob([text]).size,
+        headers: res.headers,
+        body: res.body,
+        time: res.time,
+        size: new Blob([res.body]).size,
       });
       refreshStorage();
-    } catch {
+    } catch (error) {
       setRequestState("error");
       db.setTabResponse(tabRequest?.id as string, {
         status: 0,
@@ -159,7 +195,8 @@ const RequestFrom = () => {
         body: "",
         time: 0,
         size: 0,
-        error: "server can't be reached",
+        error:
+          error instanceof Error ? error.message : "server can't be reached",
       });
       refreshStorage();
     }
@@ -318,7 +355,12 @@ const RequestFrom = () => {
               </form>
             </div>
             <div className="response-container">
-              {tabResponse && <ResponseView response={tabResponse} />}
+              {tabResponse &&
+                (tabResponse.status === 0 ? (
+                  <InternalErrorView error={tabResponse.error as string} />
+                ) : (
+                  <ResponseView response={tabResponse} />
+                ))}
             </div>
           </>
         ) : (

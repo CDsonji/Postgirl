@@ -1,0 +1,23 @@
+.error-response-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 2rem;
+}
+
+.postgirl-img {
+    height: 15rem;
+    /* margin-bottom: 2rem; */
+}
+
+.error-messages {
+    color: red;
+    margin-bottom: 1rem;
+}
+
+.internal-error-text {
+    color: red;
+    margin: 0.5rem 0;
+}
