@@ -11,7 +11,7 @@ aside {
 @media only screen and (max-width: 1237px) {
   aside {
     background-color: var(--page-primary-background);
-    width: min(27rem, 50%);
+    width: max(30rem, 40%);
     position: absolute;
     z-index: 2;
     top: 0;
@@ -77,21 +77,21 @@ aside {
   flex: 1;
 }
 
-.view-container > *:not(.add-collection) {
+.view-container > *:not(.collection-opearation-buttons) {
   min-height: 0;
   flex: 0 1 1;
   overflow-y: auto;
 }
 
-.view-container > *:not(.add-collection)::-webkit-scrollbar {
+.view-container > *:not(.collection-opearation-buttons)::-webkit-scrollbar {
   width: 0.5rem; /* thin horizontal scrollbar */
 }
 
-.view-container > *:not(.add-collection)::-webkit-scrollbar-track {
+.view-container > *:not(.collection-opearation-buttons)::-webkit-scrollbar-track {
   background: transparent; /* no big track */
 }
 
-.view-container > *:not(.add-collection)::-webkit-scrollbar-thumb {
+.view-container > *:not(.collection-opearation-buttons)::-webkit-scrollbar-thumb {
   background-color: #666; /* solid color */
   border-radius: 0.4rem;
 }

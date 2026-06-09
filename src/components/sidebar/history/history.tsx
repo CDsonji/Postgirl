@@ -3,7 +3,6 @@ import RequestItem from "../request-item/request-item";
 
 const History = () => {
   const [db] = useStorage();
-  const activeId = db.getData().activeTab?.request.id;
 
   return (
     <>
@@ -15,7 +14,7 @@ const History = () => {
               <RequestItem
                 key={timestamp} // See warning below about using timestamps as keys
                 request={request}
-                isActive={activeId === request.id}
+                isActive={false}
               />
             );
           })}

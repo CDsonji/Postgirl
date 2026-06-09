@@ -1,7 +1,7 @@
 .request-response-container {
   display: flex;
   flex-direction: column;
-  flex: 1 1 0; 
+  flex: 1 1 0;
   min-height: 0; /* Prevents container from stretching beyond parent */
 }
 
@@ -114,6 +114,11 @@
     margin-left: 0;
     align-self: center;
   }
+
+  .form-view-buttons {
+    justify-content: center;
+    gap: 1rem;
+  }
 }
 
 @media only screen and (max-width: 700px) {
@@ -183,7 +188,7 @@
 }
 
 .cm-theme-light {
-  flex: 1 1 0; 
+  flex: 1 1 0;
   min-height: 0;
   overflow-y: hidden;
 }

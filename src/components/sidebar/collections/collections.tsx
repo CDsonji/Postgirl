@@ -11,6 +11,31 @@ const Collections = () => {
     ? (collectionId = db.getRequestById(currentTab.request.id).collectionId)
     : "";
 
+  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const content = e.target?.result as string;
+
+      // Call the import method you implemented in your DataManager
+      console.log("content: ",content);
+      const success = db.importCollectionFromJson(content);
+
+      if (success) {
+        refreshStorage();
+      } else {
+        alert("Failed to import collection. Please check the JSON format.");
+      }
+    };
+
+    reader.readAsText(file);
+    // Reset the input value so the same file can be selected again if needed
+    event.target.value = "";
+  };
+
   return (
     <>
       <ul className="collections-list collections-list">
@@ -24,9 +49,9 @@ const Collections = () => {
           );
         })}
       </ul>
-      <div className="add-collection">
+      <div className="collection-opearation-buttons">
         <button
-          className="add-collection-button"
+          className="add-collection-button collection-opearation-button"
           onClick={() => {
             db.addCollection({
               id: crypto.randomUUID(),
@@ -37,6 +62,19 @@ const Collections = () => {
           }}
         >
           Add Collection
+        </button>
+        <button
+          className="import-collection-button collection-opearation-button"
+          onClick={() => {
+            // Create a temporary hidden input to trigger the file picker
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = ".json";
+            input.onchange = (e) => handleImport(e as any);
+            input.click();
+          }}
+        >
+          Import Collection
         </button>
       </div>
     </>

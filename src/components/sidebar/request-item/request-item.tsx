@@ -24,7 +24,11 @@ const RequestItem = ({ request, isActive }: RequestItemProps) => {
         <div
           className={`request-item ${isActive ? "request-is-view" : ""}`}
           onClick={() => {
-            db.addTab(request.id);
+            !db.hasRequest(request.id)
+              ? request.collectionId && db.hasCollection(request.collectionId)
+                ? db.addRequest(request)
+                : db.addRequest({ ...request, collectionId: undefined })
+              : db.addTab(request.id);
             db.updateCurrentTab(request.id);
             refreshStorage();
           }}

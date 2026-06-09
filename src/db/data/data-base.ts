@@ -30,6 +30,7 @@ export class Database implements DataManager {
       theme: data.theme ?? Theme.DARK,
     };
   }
+
   setTabResponse(requestId: string, response: HttpResponse): void {
     const tab = this.data.tabs[requestId];
     if (!tab) {
@@ -49,7 +50,7 @@ export class Database implements DataManager {
         ...this.data.tabs,
         [requestId]: updatedTab,
       },
-      activeTab: {...updatedTab},
+      activeTab: { ...updatedTab },
     };
   }
 
@@ -241,10 +242,11 @@ export class Database implements DataManager {
     );
   }
 
-  getRequestHistory(): [timestamp:string,request:HttpRequest][] {
-    return Object.entries(this.data.history)
-      .sort((a, b) => Number(b[0]) - Number(a[0]))
-      // .map((timestamp) => this.data.history[timestamp]);
+  getRequestHistory(): [timestamp: string, request: HttpRequest][] {
+    return Object.entries(this.data.history).sort(
+      (a, b) => Number(b[0]) - Number(a[0])
+    );
+    // .map((timestamp) => this.data.history[timestamp]);
   }
 
   getPartialRequestHistory(start: number = 0, end: number): HttpRequest[] {
@@ -301,10 +303,6 @@ export class Database implements DataManager {
   addRequest(request: HttpRequest): HttpRequest {
     if (!request.id.trim()) {
       throw new Error("Request id cannot be empty");
-    }
-
-    if (this.hasRequest(request.id)) {
-      throw new Error(`Request with id "${request.id}" already exists`);
     }
 
     if (request.collectionId && !this.hasCollection(request.collectionId)) {
@@ -424,6 +422,54 @@ export class Database implements DataManager {
         [collection.id]: this.cloneCollection(collection),
       },
     };
+  }
+
+  exportCollectionToJson(collectionId: string): string | null {
+    try {
+      // 1. Get the collection
+      const collection = this.getCollectionById(collectionId);
+      if (!collection) return null;
+
+      // 2. Get all requests belonging to this collection
+      const requests = this.getRequestsFromCollectionById(collectionId);
+
+      // 3. Package and stringify
+      return JSON.stringify(
+        {
+          collection,
+          requests,
+        },
+        null,
+        2
+      ); // 'null, 2' makes the JSON pretty-printed and readable
+    } catch (error) {
+      console.error("Failed to export collection:", error);
+      return null;
+    }
+  }
+
+  importCollectionFromJson(json: string): boolean {
+    // try {
+      const { collection, requests } = JSON.parse(json) as {
+        collection: Collection;
+        requests: HttpRequest[];
+      };
+
+      if (this.hasCollection(collection.id)) return false;
+
+      this.addCollection(collection);
+
+      for (const request of requests) {
+        this.addRequest({
+          ...request,
+          collectionId: collection.id,
+        });
+      }
+
+      return true;
+    // } catch {
+    //   return false;
+    // }
   }
 
   updateCollection(

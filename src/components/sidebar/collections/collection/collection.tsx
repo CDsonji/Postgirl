@@ -55,6 +55,45 @@ const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
           </h3>
           <div className="collection-item-buttons">
             <div
+              title="Download Collection"
+              className="collection-item-button download-button"
+              onClick={() => {
+                // 1. Get the JSON string from your data manager
+                const jsonString = db.exportCollectionToJson(collection.id);
+
+                if (jsonString) {
+                  // 2. Create a Blob and a temporary URL to trigger the download
+                  const blob = new Blob([jsonString], {
+                    type: "application/json",
+                  });
+                  const url = URL.createObjectURL(blob);
+
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = `${collection.title || "collection"}-${
+                    collection.id
+                  }.json`;
+                  document.body.appendChild(link); // Required for some browsers
+                  link.click();
+
+                  // 3. Cleanup
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(url);
+                } else {
+                  alert("Could not export collection.");
+                }
+              }}
+            >
+              <img
+                className="collection-item-button-icon"
+                src={`./../../../../../public/assets/download-${
+                  theme === Theme.LIGHT ? "light" : "dark"
+                }.svg`}
+                alt="add-logo"
+              />
+            </div>
+
+            <div
               className="add-request-button collection-item-button"
               title="Add Request"
               onClick={(e) => {

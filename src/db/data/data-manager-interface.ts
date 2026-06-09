@@ -87,6 +87,8 @@ export interface DataManager {
   removeRequest(id: string): HttpRequest;
 
   addCollection(collection: Collection): void;
+  exportCollectionToJson(collectionId: string): string | null;
+  importCollectionFromJson(json: string): boolean;
   updateCollection(
     collectionId: string,
     updates: Partial<Omit<Collection, "id">>

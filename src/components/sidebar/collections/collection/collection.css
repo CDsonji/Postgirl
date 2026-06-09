@@ -21,8 +21,19 @@
   background-color: var(--text-hover);
 }
 
+@media only screen and (max-width: 1237px) {
+  .collection-item-buttons {
+    display: flex;
+    gap: 0.2rem;
+    background-color: var(--text-hover);
+    /* top: 150%;
+    left: 0; */
+  }
+}
+
 .collection-item:hover .collection-item-buttons {
   display: flex;
+  gap: 0.2rem;
 }
 
 .collection-item-button {
