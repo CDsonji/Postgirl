@@ -8,6 +8,7 @@ import {
 } from "../data/data-manager-interface";
 import { Database } from "../data/data-base";
 import type { LocalStorageManager } from "./browser-local-storage-manager-interface";
+import type { HttpResponse } from "../../components/main/request-form/request-form";
 
 const sample = `{
   "requests": {
@@ -192,6 +193,19 @@ function normalizeTab(raw: any): Tab {
   return {
     createdAt: raw?.createdAt,
     request: normalizeHttpRequest(raw?.request, raw?.request.id),
+    response: raw?.response ? normalizeHttpResponse(raw?.response) : null,
+  };
+}
+
+function normalizeHttpResponse(raw: any): HttpResponse {
+  return {
+    status: raw?.status,
+    statusText: raw?.statusText,
+    headers: raw?.headers,
+    body: raw?.body,
+    time: raw?.time,
+    size: raw?.time,
+    error: raw?.error,
   };
 }
 
@@ -207,7 +221,10 @@ function normalizeHttpRequest(raw: any, fallbackId: string): HttpRequest {
   };
 }
 
-function normalizeCollection(raw: any, fallbackId: string | undefined): Collection {
+function normalizeCollection(
+  raw: any,
+  fallbackId: string | undefined
+): Collection {
   return {
     id: raw?.id ?? fallbackId,
     title: String(raw?.title ?? ""),

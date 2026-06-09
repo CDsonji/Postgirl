@@ -1,0 +1,58 @@
+.response-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.form-view-button {
+  padding: 0.5rem 2rem;
+}
+
+.response-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 1.2rem;
+  margin-right: 2rem;
+}
+
+.status-code.error {
+    color: red;
+}
+
+.status-code.success {
+    color: var(--status-success);
+}
+
+.time, .size {
+    color: var(--response-meta);
+}
+
+.response-body-container {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.response-body-container::-webkit-scrollbar {
+  width: 0.7rem; /* thin horizontal scrollbar */
+}
+
+.response-body-container::-webkit-scrollbar-track {
+  background: transparent; /* no big track */
+}
+
+.response-body-container::-webkit-scrollbar-thumb {
+  background-color: #666; /* solid color */
+  border-radius: 0.4rem;
+}
+
+.response-body-container::-webkit-scrollbar-thumb:hover {
+  background-color: #888;
+}

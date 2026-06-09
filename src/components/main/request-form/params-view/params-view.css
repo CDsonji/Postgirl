@@ -7,8 +7,11 @@
   border: 0.2rem solid var(--component-border);
   background-color: var(--page-primary-background);
   border-radius: 0.4rem;
-  height: max-content;
-  max-height: 100%;
+
+  /* Height based on content, up to 100% of form-view */
+  flex: 0 1 auto; /* 0 grow (size to content), 1 shrink (allow shrinking if too big) */
+  min-height: 0; /* CRITICAL: allows it to shrink below content height and scroll */
+
   overflow-y: auto;
   overflow-x: hidden;
   white-space: nowrap;

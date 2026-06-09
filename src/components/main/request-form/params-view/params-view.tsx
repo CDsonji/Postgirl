@@ -51,26 +51,24 @@ const ParamsView = ({ request }: Props) => {
   };
 
   return (
-    <div className="params-view form-view-item">
-      <div className="kvs-container">
-        {params.map(([k, v], i) => (
-          <div className="kv-item" key={i}>
-            <input
-              className="kv-input"
-              placeholder="key"
-              value={k}
-              onChange={(e) => updateRow(i, e.target.value)}
-            />
+    <div className="kvs-container">
+      {params.map(([k, v], i) => (
+        <div className="kv-item" key={i}>
+          <input
+            className="kv-input"
+            placeholder="key"
+            value={k}
+            onChange={(e) => updateRow(i, e.target.value)}
+          />
 
-            <input
-              className="kv-input second-input"
-              placeholder="value"
-              value={v}
-              onChange={(e) => updateRow(i, undefined, e.target.value)}
-            />
-          </div>
-        ))}
-      </div>
+          <input
+            className="kv-input second-input"
+            placeholder="value"
+            value={v}
+            onChange={(e) => updateRow(i, undefined, e.target.value)}
+          />
+        </div>
+      ))}
     </div>
   );
 };

@@ -1,6 +1,24 @@
-.requet-form-container {
-  margin: 2rem 3rem;
-  flex: 1;
+.request-response-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0; 
+  min-height: 0; /* Prevents container from stretching beyond parent */
+}
+
+.request-response-container > * {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0; /* Strictly divide space 50/50 */
+  min-height: 0; /* Crucial: forces them to respect the 50% height and allow inner scrolling */
+}
+
+.request-container {
+  padding: 2rem 3rem 2rem 3rem;
+}
+
+.response-container {
+  padding: 0.5rem 1rem;
+  border-top: 0.2rem solid var(--component-border);
 }
 
 .form-header,
@@ -20,6 +38,7 @@
 .request-form {
   flex-direction: column;
   height: 100%;
+  min-height: 0;
 }
 
 .url-container {
@@ -126,15 +145,14 @@
 
 .form-view {
   margin-top: 1rem;
-  height: 33.5%;
-}
-
-.form-view> * {
-  height: 100%;
-}
-
-.form-view-item {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 0; /* Strictly fill remaining space */
+  min-height: 0; /* Crucial for inner scroll */
+}
+
+.cm-theme-light {
+  flex: 1 1 0; 
+  min-height: 0;
+  overflow-y: hidden;
 }

@@ -47,7 +47,6 @@ const HeadersView = ({ request }: Props) => {
   };
 
   return (
-    <div className="params-view form-view-item">
       <div className="kvs-container">
         {headers.map(([k, v], i) => (
           <div className="kv-item" key={i}>
@@ -67,7 +66,6 @@ const HeadersView = ({ request }: Props) => {
           </div>
         ))}
       </div>
-    </div>
   );
 };
 

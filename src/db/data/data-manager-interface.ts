@@ -29,6 +29,16 @@ export interface HttpRequest {
   body?: string;
 }
 
+export interface HttpResponse {
+  status: number;
+  statusText: string;
+  headers: Record<string, string>;
+  body: string;
+  time: number;
+  size: number;
+  error?: string;
+}
+
 export interface Collection {
   id: string;
   title: string;
@@ -47,6 +57,7 @@ export interface Data {
 export interface Tab {
   createdAt: string;
   request: HttpRequest;
+  response: HttpResponse | null;
 }
 
 export interface DataManager {
@@ -60,9 +71,9 @@ export interface DataManager {
   getRequestsFromCollectionById(collectionId: string): HttpRequest[];
 
   getRequestHistory(): HttpRequest[];
-  getPartialRequestHistory(start: number, end: number): HttpRequest[];
+  // getPartialRequestHistory(start: number, end: number): HttpRequest[];
   addRequestToHistory(request: HttpRequest): void;
-  removeRequestFromHistory(timestamp: number): HttpRequest;
+  // removeRequestFromHistory(timestamp: number): HttpRequest;
 
   hasRequest(id: string): boolean;
   hasCollection(id: string): boolean;
@@ -90,11 +101,13 @@ export interface DataManager {
     requestId: string,
     updates: Partial<Omit<HttpRequest, "collectionId">>
   ): void;
+
+  setTabResponse(requestId: string, response: HttpResponse): void;
   removeTab(requestId: string): Tab;
 
-  clearRequests(): void;
-  clearCollections(): void;
-  clearAll(): void;
+  // clearRequests(): void;
+  // clearCollections(): void;
+  // clearAll(): void;
 
   toggleTheme(): void;
 }

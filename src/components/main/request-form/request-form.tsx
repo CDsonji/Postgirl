@@ -10,6 +10,7 @@ import { useTheme } from "../../theme/theme-context";
 import ParamsView from "./params-view/params-view";
 import HeadersView from "./headers-view/headers-view";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
+import ResponseView from "../response-view/response-view";
 
 const FormView = {
   HEADERS: "headers",
@@ -36,9 +37,19 @@ const RequestFrom = () => {
   const { theme } = useTheme();
   const [view, setView] = useState(FormView.PARAMS);
   const [requestState, setRequestState] = useState<RequestState>("idle");
-  const [response, setResponse] = useState<HttpResponse | null>(null);
   const tab = db.getData().activeTab;
+  console.log("active tab: ",tab);
+  // const [response, setResponse] = useState<HttpResponse | null>(
+  //   tab?.response || null
+  // );
   const tabRequest: HttpRequest | null = tab?.createdAt ? tab.request : null;
+  const tabResponse: HttpResponse | null = tab?.createdAt ? tab.response : null;
+  console.log(tabResponse);
+
+  useEffect(() => {
+    setView(FormView.PARAMS);
+    // setResponse()
+  }, [tab?.createdAt]);
 
   const Themeee = EditorView.theme({
     "&": {
@@ -102,7 +113,7 @@ const RequestFrom = () => {
 
     if (errors.length) {
       setRequestState("error");
-      setResponse({
+      db.setTabResponse(tabRequest?.id as string, {
         status: 0,
         statusText: "",
         headers: {},
@@ -111,6 +122,7 @@ const RequestFrom = () => {
         size: 0,
         error: errors.join(", "),
       });
+      refreshStorage();
       return;
     }
 
@@ -128,7 +140,8 @@ const RequestFrom = () => {
       const text = await res.text();
       const end = performance.now();
 
-      setResponse({
+      setRequestState("success");
+      db.setTabResponse(tabRequest?.id as string, {
         status: res.status,
         statusText: res.statusText,
         headers: Object.fromEntries(res.headers.entries()),
@@ -136,12 +149,10 @@ const RequestFrom = () => {
         time: Math.round(end - start),
         size: new Blob([text]).size,
       });
-
-      setRequestState("success");
+      refreshStorage();
     } catch {
       setRequestState("error");
-
-      setResponse({
+      db.setTabResponse(tabRequest?.id as string, {
         status: 0,
         statusText: "",
         headers: {},
@@ -150,156 +161,166 @@ const RequestFrom = () => {
         size: 0,
         error: "server can't be reached",
       });
+      refreshStorage();
     }
   };
 
   return (
     <>
-      <div className="requet-form-container">
+      <div className="request-response-container">
         {tabRequest ? (
-          <form className="request-form">
-            <div className="form-header">
-              <div className="url-container">
-                <MethodSelect
-                  value={tabRequest.method}
-                  onChange={(m) => {
-                    db.updateTabForm(tabRequest.id, {
-                      method: m,
-                    });
-                    refreshStorage();
-                  }}
-                />
-                <input
-                  type="text"
-                  className="url-input"
-                  value={tabRequest.url}
-                  placeholder="Enter the URL of the Request"
-                  onChange={(e) => {
-                    const newUrl = e.target.value;
-
-                    try {
-                      const url = new URL(newUrl);
-
-                      const params: Record<string, string> = {};
-                      url.searchParams.forEach((value, key) => {
-                        params[key] = value;
-                      });
-
-                      db.updateTabForm(tabRequest.id, {
-                        url: newUrl,
-                        params,
-                      });
-
-                      refreshStorage();
-                    } catch {
-                      // if the URL is temporarily invalid while typing
-                      db.updateTabForm(tabRequest.id, { url: newUrl });
-                      refreshStorage();
-                    }
-                  }}
-                />
-              </div>
-              <div className="form-header-buttons">
-                <button
-                  type="button"
-                  className="send-button form-header-button"
-                  onClick={sendRequest}
-                >
-                  Send
-                </button>
-                <button
-                  type="button"
-                  className="reset-button form-header-button"
-                  onClick={() => {
-                    db.updateTabForm(
-                      tabRequest.id,
-                      db.getRequestById(tabRequest.id)
-                    );
-                    refreshStorage();
-                  }}
-                >
-                  <div className="reset-button-container">
-                    <img
-                      className="reset-logo"
-                      src={`./../../../public/assets/reset-${
-                        theme === Theme.DARK ? "dark" : "light"
-                      }.svg`}
-                      alt="reset-logo"
+          <>
+            <div className="request-container">
+              <form className="request-form">
+                <div className="form-header">
+                  <div className="url-container">
+                    <MethodSelect
+                      value={tabRequest.method}
+                      onChange={(m) => {
+                        db.updateTabForm(tabRequest.id, {
+                          method: m,
+                        });
+                        refreshStorage();
+                      }}
                     />
-                    <span>Reset</span>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  className="save-button form-header-button"
-                  onClick={() => {
-                    db.updateRequest(tabRequest.id, { ...tabRequest });
-                    refreshStorage();
-                  }}
-                >
-                  <div className="save-button-container">
-                    <img
-                      className="save-logo"
-                      src={`./../../../public/assets/save-${
-                        theme === Theme.DARK ? "dark" : "light"
-                      }.svg`}
-                      alt="save-logo"
+                    <input
+                      type="text"
+                      className="url-input"
+                      value={tabRequest.url}
+                      placeholder="Enter the URL of the Request"
+                      onChange={(e) => {
+                        const newUrl = e.target.value;
+
+                        try {
+                          const url = new URL(newUrl);
+
+                          const params: Record<string, string> = {};
+                          url.searchParams.forEach((value, key) => {
+                            params[key] = value;
+                          });
+
+                          db.updateTabForm(tabRequest.id, {
+                            url: newUrl,
+                            params,
+                          });
+
+                          refreshStorage();
+                        } catch {
+                          // if the URL is temporarily invalid while typing
+                          db.updateTabForm(tabRequest.id, { url: newUrl });
+                          refreshStorage();
+                        }
+                      }}
                     />
-                    <span>Save</span>
                   </div>
-                </button>
-              </div>
+                  <div className="form-header-buttons">
+                    <button
+                      type="button"
+                      disabled={requestState === "loading"}
+                      className="send-button form-header-button"
+                      onClick={sendRequest}
+                    >
+                      {requestState === "loading" ? "Sending" : "Send"}
+                    </button>
+                    <button
+                      type="button"
+                      className="reset-button form-header-button"
+                      onClick={() => {
+                        db.updateTabForm(
+                          tabRequest.id,
+                          db.getRequestById(tabRequest.id)
+                        );
+                        refreshStorage();
+                      }}
+                    >
+                      <div className="reset-button-container">
+                        <img
+                          className="reset-logo"
+                          src={`./../../../public/assets/reset-${
+                            theme === Theme.DARK ? "dark" : "light"
+                          }.svg`}
+                          alt="reset-logo"
+                        />
+                        <span>Reset</span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      className="save-button form-header-button"
+                      onClick={() => {
+                        db.updateRequest(tabRequest.id, { ...tabRequest });
+                        refreshStorage();
+                      }}
+                    >
+                      <div className="save-button-container">
+                        <img
+                          className="save-logo"
+                          src={`./../../../public/assets/save-${
+                            theme === Theme.DARK ? "dark" : "light"
+                          }.svg`}
+                          alt="save-logo"
+                        />
+                        <span>Save</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                <div className="form-view-buttons">
+                  <button
+                    type="button"
+                    className={`form-view-button ${
+                      view === FormView.PARAMS && "form-active-view"
+                    }`}
+                    onClick={() => setView(FormView.PARAMS)}
+                  >
+                    Query Params
+                  </button>
+                  <button
+                    type="button"
+                    className={`form-view-button ${
+                      view === FormView.HEADERS && "form-active-view"
+                    }`}
+                    onClick={() => setView(FormView.HEADERS)}
+                  >
+                    Headers
+                  </button>
+                  {METHODS_WITH_BODY.includes(tabRequest.method) && (
+                    <button
+                      type="button"
+                      className={`form-view-button ${
+                        view === FormView.BODY && "form-active-view"
+                      }`}
+                      onClick={() => setView(FormView.BODY)}
+                    >
+                      Body
+                    </button>
+                  )}
+                </div>
+                <div className="form-view">
+                  {view === FormView.PARAMS && (
+                    <ParamsView request={tabRequest} />
+                  )}
+                  {view === FormView.HEADERS && (
+                    <HeadersView request={tabRequest} />
+                  )}
+                  {view === FormView.BODY && (
+                    <CodeMirror
+                      value={tabRequest.body ?? ""}
+                      height="100%"
+                      extensions={[Themeee]}
+                      onChange={(value) => {
+                        db.updateTabForm(tabRequest.id, { body: value });
+                        refreshStorage();
+                      }}
+                    />
+                  )}
+                </div>
+              </form>
             </div>
-            <div className="form-view-buttons">
-              <button
-                type="button"
-                className={`form-view-button ${
-                  view === FormView.PARAMS && "form-active-view"
-                }`}
-                onClick={() => setView(FormView.PARAMS)}
-              >
-                Query Params
-              </button>
-              <button
-                type="button"
-                className={`form-view-button ${
-                  view === FormView.HEADERS && "form-active-view"
-                }`}
-                onClick={() => setView(FormView.HEADERS)}
-              >
-                Headers
-              </button>
-              {METHODS_WITH_BODY.includes(tabRequest.method) && (
-                <button
-                  type="button"
-                  className={`form-view-button ${
-                    view === FormView.BODY && "form-active-view"
-                  }`}
-                  onClick={() => setView(FormView.BODY)}
-                >
-                  Body
-                </button>
-              )}
+            <div className="response-container">
+              {tabResponse && <ResponseView response={tabResponse} />}
             </div>
-            <div className="form-view">
-              {view === FormView.PARAMS && <ParamsView request={tabRequest} />}
-              {view === FormView.HEADERS && (
-                <HeadersView request={tabRequest} />
-              )}
-              {view === FormView.BODY && (
-                <CodeMirror
-                  value={tabRequest.body ?? ""}
-                  height="100%"
-                  // theme="dark"
-                  extensions={[Themeee]}
-                  onChange={(value) => {
-                    db.updateTabForm(tabRequest.id, { body: value });
-                    refreshStorage();
-                  }}
-                />
-              )}
-            </div>
-          </form>
+          </>
         ) : (
           <></>
         )}

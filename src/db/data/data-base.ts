@@ -4,6 +4,7 @@ import {
   type Data,
   type DataManager,
   type HttpRequest,
+  type HttpResponse,
   type Tab,
 } from "./data-manager-interface";
 
@@ -27,6 +28,28 @@ export class Database implements DataManager {
       tabs: { ...data.tabs },
       activeTab: data.activeTab ? { ...data.activeTab } : null,
       theme: data.theme ?? Theme.DARK,
+    };
+  }
+  setTabResponse(requestId: string, response: HttpResponse): void {
+    const tab = this.data.tabs[requestId];
+    if (!tab) {
+      throw new Error(`tab with request id "${requestId}" not found`);
+    }
+
+    const updatedTab = {
+      ...tab,
+      response: { ...response },
+    };
+
+    console.log(updatedTab);
+
+    this.data = {
+      ...this.data,
+      tabs: {
+        ...this.data.tabs,
+        [requestId]: updatedTab,
+      },
+      activeTab: {...updatedTab},
     };
   }
 
@@ -60,8 +83,6 @@ export class Database implements DataManager {
       },
       activeTab: updatedTab,
     };
-
-    console.log(this.data.tabs[requestId]);
   }
 
   getTabs(): Tab[] {
@@ -77,6 +98,7 @@ export class Database implements DataManager {
       const newTab: Tab = {
         createdAt: String(Date.now()),
         request: request,
+        response: null,
       };
 
       this.data = {
