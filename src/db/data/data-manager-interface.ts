@@ -73,7 +73,7 @@ export interface DataManager {
   getRequestHistory(): [timestamp: string, request: HttpRequest][];
   // getPartialRequestHistory(start: number, end: number): HttpRequest[];
   addRequestToHistory(request: HttpRequest): void;
-  // removeRequestFromHistory(timestamp: number): HttpRequest;
+  removeRequestFromHistory(timestamp: string): HttpRequest;
 
   hasRequest(id: string): boolean;
   hasCollection(id: string): boolean;

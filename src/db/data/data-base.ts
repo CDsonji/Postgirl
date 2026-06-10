@@ -278,16 +278,15 @@ export class Database implements DataManager {
     };
   }
 
-  removeRequestFromHistory(timestamp: number): HttpRequest {
-    const key = timestamp.toString();
-    const request = this.data.history[key];
+  removeRequestFromHistory(timestamp: string): HttpRequest {
+    const request = this.data.history[timestamp];
 
     if (!request) {
       throw new Error(`No request found in history for timestamp ${timestamp}`);
     }
 
     const newHistory = { ...this.data.history };
-    delete newHistory[key];
+    delete newHistory[timestamp];
 
     this.data = {
       ...this.data,
@@ -450,23 +449,23 @@ export class Database implements DataManager {
 
   importCollectionFromJson(json: string): boolean {
     // try {
-      const { collection, requests } = JSON.parse(json) as {
-        collection: Collection;
-        requests: HttpRequest[];
-      };
+    const { collection, requests } = JSON.parse(json) as {
+      collection: Collection;
+      requests: HttpRequest[];
+    };
 
-      if (this.hasCollection(collection.id)) return false;
+    if (this.hasCollection(collection.id)) return false;
 
-      this.addCollection(collection);
+    this.addCollection(collection);
 
-      for (const request of requests) {
-        this.addRequest({
-          ...request,
-          collectionId: collection.id,
-        });
-      }
+    for (const request of requests) {
+      this.addRequest({
+        ...request,
+        collectionId: collection.id,
+      });
+    }
 
-      return true;
+    return true;
     // } catch {
     //   return false;
     // }

@@ -1,5 +1,6 @@
 import { useStorage } from "../../../db/storage-context";
 import RequestItem from "../request-item/request-item";
+import { SidebarView } from "../sidebar";
 
 const Requests = () => {
   const [db] = useStorage();
@@ -14,6 +15,7 @@ const Requests = () => {
               key={request.id}
               request={request}
               isActive={activeId === request.id}
+              itemKey={`${SidebarView.REQUESTS}_${request.id}`}
             />
           );
         })}

@@ -7,6 +7,7 @@ import { useTheme } from "../../../theme/theme-context";
 import { useStorage } from "../../../../db/storage-context";
 import RequestItem from "../../request-item/request-item";
 import "./collection.css";
+import { SidebarView } from "../../sidebar";
 
 type CollectionProps = {
   collection: Collection;
@@ -144,6 +145,7 @@ const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
                   key={request.id}
                   request={request}
                   isActive={activeId === request.id}
+                  itemKey={`${SidebarView.COLLECTIONS}_${request.id}`}
                 />
               );
             })}

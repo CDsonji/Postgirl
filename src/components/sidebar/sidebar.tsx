@@ -4,7 +4,7 @@ import Collections from "./collections/collections";
 import "./sidebar.css";
 import Requests from "./requests/request";
 
-const SidebarView = {
+export const SidebarView = {
   COLLECTIONS: "collections",
   HISTORY: "history",
   REQUESTS: "requests",

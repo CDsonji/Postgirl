@@ -6,13 +6,15 @@ import {
 import { useTheme } from "../../theme/theme-context";
 import { useStorage } from "../../../db/storage-context";
 import "./request-item.css";
+import { SidebarView } from "../sidebar";
 
 type RequestItemProps = {
   request: HttpRequest;
   isActive: boolean;
+  itemKey: string;
 };
 
-const RequestItem = ({ request, isActive }: RequestItemProps) => {
+const RequestItem = ({ request, isActive, itemKey }: RequestItemProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
 
@@ -77,7 +79,10 @@ const RequestItem = ({ request, isActive }: RequestItemProps) => {
               className="request-item-button delete-button item-button"
               onClick={(e) => {
                 e.stopPropagation();
-                db.removeRequest(request.id);
+                const key: string[] = itemKey.split("_");
+                if (key[0] === SidebarView.HISTORY)
+                  db.removeRequestFromHistory(key[1]);
+                else db.removeRequest(request.id);
                 setOpenCollections(false);
                 refreshStorage();
               }}
