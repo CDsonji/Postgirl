@@ -1,8 +1,8 @@
 import { useState } from "react";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import { json } from "@codemirror/lang-json";
-import type { HttpResponse } from "../request-form/request-form";
 import "./response-view.css";
+import type { HttpResponse } from "../../../../db/data/data-manager-interface";
 
 type ResponseViewProps = {
   response: HttpResponse;
@@ -97,7 +97,7 @@ const ResponseView = ({ response }: ResponseViewProps) => {
           <CodeMirror
             value={response.body}
             height="100%"
-            extensions={[ReadOnlyTheme, EditorView.lineWrapping, json()]}
+            extensions={[ReadOnlyTheme, json()]}
             readOnly={true}
             editable={false}
           />
@@ -117,7 +117,7 @@ const ResponseView = ({ response }: ResponseViewProps) => {
                   <input
                     className="kv-input second-input"
                     placeholder="value"
-                    value={v}
+                    value={v as string}
                     readOnly
                   />
                 </div>

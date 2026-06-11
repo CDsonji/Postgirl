@@ -3,6 +3,7 @@ import { useStorage } from "../../../db/storage-context";
 import {
   Theme,
   type HttpRequest,
+  type HttpResponse,
 } from "../../../db/data/data-manager-interface";
 import "./request-form.css";
 import MethodSelect from "./method-select/method-select";
@@ -20,16 +21,6 @@ const FormView = {
   HEADERS: "headers",
   PARAMS: "params",
   BODY: "body",
-};
-
-export type HttpResponse = {
-  status: number;
-  statusText: string;
-  headers: Record<string, string>;
-  body: string;
-  time: number;
-  size: number;
-  error?: string;
 };
 
 type RequestState = "idle" | "loading" | "success" | "error";
@@ -101,7 +92,7 @@ const RequestFrom = () => {
       const start = performance.now();
 
       // Send request data to your local proxy
-      const proxyRes = await fetch("http://localhost:3001/proxy", {
+      const proxyRes = await fetch("/proxy", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
