@@ -10,9 +10,11 @@ import { useTheme } from "../../theme/theme-context";
 import ParamsView from "./params-view/params-view";
 import HeadersView from "./headers-view/headers-view";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
-import ResponseView from "../response-view/response-view";
-import InternalErrorView from "../internal-error-view/internal-error-view";
+
+import InternalErrorView from "./internal-error-view/internal-error-view";
 import { json } from "@codemirror/lang-json";
+import EmptyView from "./empty-view/empty-view";
+import ResponseView from "./response-view/response-view";
 
 const FormView = {
   HEADERS: "headers",
@@ -40,48 +42,12 @@ const RequestFrom = () => {
   const [view, setView] = useState(FormView.PARAMS);
   const [requestState, setRequestState] = useState<RequestState>("idle");
   const tab = db.getData().activeTab;
-  console.log("active tab: ", tab);
-  // const [response, setResponse] = useState<HttpResponse | null>(
-  //   tab?.response || null
-  // );
   const tabRequest: HttpRequest | null = tab?.createdAt ? tab.request : null;
   const tabResponse: HttpResponse | null = tab?.createdAt ? tab.response : null;
-  console.log(tabResponse);
 
   useEffect(() => {
     setView(FormView.PARAMS);
-    // setResponse()
   }, [tab?.createdAt]);
-
-  // const Themeee = EditorView.theme({
-  //   "&": {
-  //     backgroundColor: "var(--page-secondary-background)",
-  //     color: "var(--text-color)",
-  //     fontSize: "1.3rem",
-  //     border: "0.2rem solid var(--component-border)",
-  //   },
-  //   ".cm-activeLine": {
-  //     backgroundColor:
-  //       theme === Theme.DARK
-  //         ? "rgba(255, 255, 255, 0.03)"
-  //         : "rgba(0, 0, 0, 0.1)",
-  //   },
-  //   ".cm-gutters": {
-  //     backgroundColor: "var(--page-secondary-background)",
-  //     color: "#858585",
-  //     border: "none",
-  //   },
-  //   ".cm-content": {
-  //     backgroundColor: "var(--page-primary-background)",
-  //   },
-  //   ".cm-activeLineGutter": {
-  //     backgroundColor: "transparent",
-  //   },
-  //   ".cm-cursor": {
-  //     borderLeftColor: "var(--text-color)",
-  //     borderLeftWidth: "0.2rem",
-  //   },
-  // });
 
   const sendRequest = async () => {
     const req = tab?.request;
@@ -149,7 +115,6 @@ const RequestFrom = () => {
       });
 
       const data = await proxyRes.json();
-      console.log(data);
       const end = performance.now();
 
       if (!proxyRes.ok) {
@@ -385,9 +350,14 @@ const RequestFrom = () => {
                   <ResponseView response={tabResponse} />
                 ))}
             </div>
+            <div
+              className={`request-loading-line ${
+                requestState === "loading" ? "active" : ""
+              }`}
+            />
           </>
         ) : (
-          <></>
+          <EmptyView />
         )}
       </div>
     </>

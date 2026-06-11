@@ -13,7 +13,6 @@ const TabComponent = ({ tab, isActive }: TabProps) => {
   const { theme } = useTheme();
   const [db, refreshStorage] = useStorage();
   const request = db.getRequestById(tab.request.id);
-  if (isActive) tab;
 
   return (
     <li
@@ -26,7 +25,7 @@ const TabComponent = ({ tab, isActive }: TabProps) => {
       {/* <Link to={`/tabs/${request.id}`} className="tab-link"> */}
       <h4 className="tab-title">
         <span className={`${request.method} method`}>{request.method}</span>{" "}
-        {request.url}
+        {request.url || "untitled request"}
       </h4>
       <div
         className="tab-button tab-exit-button"

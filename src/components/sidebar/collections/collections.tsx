@@ -21,7 +21,6 @@ const Collections = () => {
       const content = e.target?.result as string;
 
       // Call the import method you implemented in your DataManager
-      console.log("content: ",content);
       const success = db.importCollectionFromJson(content);
 
       if (success) {

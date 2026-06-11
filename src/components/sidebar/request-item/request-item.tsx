@@ -38,7 +38,7 @@ const RequestItem = ({ request, isActive, itemKey }: RequestItemProps) => {
           <h4 className="request-item-method">
             <span className={`${request.method} method`}>{request.method}</span>
           </h4>
-          <h4 className="request-item-url">{request.url}</h4>
+          <h4 className="request-item-url">{request.url || "untitled request"}</h4>
           <div className="request-item-buttons item-buttons">
             <div
               className="request-item-button add-button-wrapper"

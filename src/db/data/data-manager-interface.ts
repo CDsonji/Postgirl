@@ -71,7 +71,6 @@ export interface DataManager {
   getRequestsFromCollectionById(collectionId: string): HttpRequest[];
 
   getRequestHistory(): [timestamp: string, request: HttpRequest][];
-  // getPartialRequestHistory(start: number, end: number): HttpRequest[];
   addRequestToHistory(request: HttpRequest): void;
   removeRequestFromHistory(timestamp: string): HttpRequest;
 
@@ -106,10 +105,6 @@ export interface DataManager {
 
   setTabResponse(requestId: string, response: HttpResponse): void;
   removeTab(requestId: string): Tab;
-
-  // clearRequests(): void;
-  // clearCollections(): void;
-  // clearAll(): void;
 
   toggleTheme(): void;
 }

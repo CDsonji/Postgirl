@@ -102,7 +102,7 @@ const CollectionComponent = ({ collection, isActive }: CollectionProps) => {
                 const request = db.addRequest({
                   id: crypto.randomUUID(),
                   collectionId: collection.id,
-                  url: "http://localhost:8000",
+                  url: "",
                   method: Method.GET,
                   params: {},
                   headers: {},

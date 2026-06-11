@@ -42,8 +42,6 @@ export class Database implements DataManager {
       response: { ...response },
     };
 
-    console.log(updatedTab);
-
     this.data = {
       ...this.data,
       tabs: {
@@ -133,21 +131,12 @@ export class Database implements DataManager {
     let current = tabs.findIndex(
       (t) => t.request.id === this.data.activeTab?.request.id
     );
-    // console.log(`current: ${current}`);
-    // console.log(`index: ${index} ${index===0} ${index + 1 < tabs.length}`);
     if (current === index) {
-      if (index === 0) {
-        if (index + 1 < tabs.length) {
-          // console.log("next");
-          this.updateCurrentTab(tabs[index + 1].request.id);
-        } else {
-          // console.log("null");
-          this.updateCurrentTab();
-        }
-      } else {
-        // console.log("previous");
-        this.updateCurrentTab(tabs[index! - 1].request.id);
-      }
+      index === 0
+        ? index + 1 < tabs.length
+          ? this.updateCurrentTab(tabs[index + 1].request.id)
+          : this.updateCurrentTab()
+        : this.updateCurrentTab(tabs[index! - 1].request.id);
     }
 
     const newTabs = { ...this.data.tabs };
@@ -221,11 +210,11 @@ export class Database implements DataManager {
   }
 
   getAllRequests(): HttpRequest[] {
-    return Object.values(this.data.requests);
+    return Object.values(this.data.requests).reverse();
   }
 
   getAllCollections(): Collection[] {
-    return Object.values(this.data.collections);
+    return Object.values(this.data.collections).reverse();
   }
 
   getRequestsFromCollectionById(collectionId: string): HttpRequest[] {
@@ -237,16 +226,15 @@ export class Database implements DataManager {
       throw new Error(`Collection with id "${collectionId}" not found`);
     }
 
-    return Object.values(this.data.requests).filter(
-      (request) => request.collectionId === collectionId
-    );
+    return Object.values(this.data.requests)
+      .filter((request) => request.collectionId === collectionId)
+      .reverse();
   }
 
   getRequestHistory(): [timestamp: string, request: HttpRequest][] {
     return Object.entries(this.data.history).sort(
       (a, b) => Number(b[0]) - Number(a[0])
     );
-    // .map((timestamp) => this.data.history[timestamp]);
   }
 
   getPartialRequestHistory(start: number = 0, end: number): HttpRequest[] {
@@ -448,27 +436,27 @@ export class Database implements DataManager {
   }
 
   importCollectionFromJson(json: string): boolean {
-    // try {
-    const { collection, requests } = JSON.parse(json) as {
-      collection: Collection;
-      requests: HttpRequest[];
-    };
+    try {
+      const { collection, requests } = JSON.parse(json) as {
+        collection: Collection;
+        requests: HttpRequest[];
+      };
 
-    if (this.hasCollection(collection.id)) return false;
+      if (this.hasCollection(collection.id)) return false;
 
-    this.addCollection(collection);
+      this.addCollection(collection);
 
-    for (const request of requests) {
-      this.addRequest({
-        ...request,
-        collectionId: collection.id,
-      });
+      for (const request of requests) {
+        this.addRequest({
+          ...request,
+          collectionId: collection.id,
+        });
+      }
+
+      return true;
+    } catch {
+      return false;
     }
-
-    return true;
-    // } catch {
-    //   return false;
-    // }
   }
 
   updateCollection(

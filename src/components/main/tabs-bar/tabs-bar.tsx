@@ -29,7 +29,7 @@ const TabsBar = () => {
           onClick={() => {
             const request = db.addRequest({
               id: crypto.randomUUID(),
-              url: "http://localhost:8000",
+              url: "",
               method: Method.GET,
               params: {},
               headers: {},
